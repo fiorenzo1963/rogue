@@ -32,6 +32,11 @@ msg(char *fmt, ...)
     {
 	move(0, 0);
 	clrtoeol();
+        /*
+         * need to refresh, otherwise if we do inventory or options
+         * the first line won't show.
+         */
+        refresh();
 	mpos = 0;
 	return ~ESCAPE;
     }
