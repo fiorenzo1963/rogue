@@ -67,6 +67,8 @@ bool allscore = FALSE;
 
 #ifdef CHECKTIME
 static int num_checks;		/* times we've gone over in checkout() */
+/* VARARGS1 */
+void chmsg(char *fmt, int arg);
 #endif /* CHECKTIME */
 
 /*
@@ -320,8 +322,7 @@ checkout(int sig)
  *	shell, do a printf instead of a msg to a the refresh.
  */
 /* VARARGS1 */
-
-chmsg(char *fmt, int arg)
+void chmsg(char *fmt, int arg)
 {
     if (!in_shell)
 	msg(fmt, arg);
