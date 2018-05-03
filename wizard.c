@@ -129,10 +129,23 @@ create_obj()
 {
     THING *obj;
     char ch, bless;
+    int bad_object = FALSE;
 
     obj = new_item();
-    msg("type of item: ");
+    msg("type of item %c%c%c%c%c: ", WEAPON, ARMOR, RING, STICK, GOLD);
     obj->o_type = readchar();
+    switch (obj->o_type) {
+    case WEAPON:
+    case ARMOR:
+    case RING:
+    case STICK:
+    case GOLD:
+        break;
+    default:
+        msg("unknown item %c", obj->o_type);
+        discard(obj);
+        return;
+    }
     mpos = 0;
     msg("which %c do you want? (0-f)", obj->o_type);
     obj->o_which = (isdigit((ch = readchar())) ? ch - '0' : ch - 'a' + 10);
@@ -148,6 +161,11 @@ create_obj()
 	    obj->o_flags |= ISCURSED;
 	if (obj->o_type == WEAPON)
 	{
+            if (obj->o_which >= MAXWEAPONS) {
+                msg("unknown weapon %x", obj->o_which);
+                discard(obj);
+                return;
+            }
 	    init_weapon(obj, obj->o_which);
 	    if (bless == '-')
 		obj->o_hplus -= rnd(3)+1;
@@ -156,6 +174,11 @@ create_obj()
 	}
 	else
 	{
+            if (obj->o_which >= MAXARMORS) {
+                msg("unknown armor %x", obj->o_which);
+                discard(obj);
+                return;
+            }
 	    obj->o_arm = a_class[obj->o_which];
 	    if (bless == '-')
 		obj->o_arm += rnd(3)+1;
@@ -176,9 +199,15 @@ create_obj()
 		if (bless == '-')
 		    obj->o_flags |= ISCURSED;
 		obj->o_arm = (bless == '-' ? -1 : rnd(2) + 1);
-	    when R_AGGR:
+	        break;
+            case R_AGGR:
 	    case R_TELEPORT:
 		obj->o_flags |= ISCURSED;
+                break;
+            default:
+                msg("unknown ring %x", obj->o_which);
+                discard(obj);
+                return;
 	}
     else if (obj->o_type == STICK)
 	fix_stick(obj);
