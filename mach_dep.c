@@ -48,6 +48,7 @@
 #include <time.h>
 #include <curses.h>
 #include "extern.h"
+#include "rogue.h"
 
 #define NOOP(x) (x += 0)
 
@@ -102,7 +103,7 @@ void
 open_score()
 {
 #ifdef SCOREFILE
-    char *scorefile = SCOREFILE;
+    char *scorefile = rookie_mode ? "rookie-" SCOREFILE : "veteran-" SCOREFILE;
      /* 
       * We drop setgid privileges after opening the score file, so subsequent 
       * open()'s will fail.  Just reuse the earlier filehandle. 

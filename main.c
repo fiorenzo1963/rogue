@@ -42,6 +42,12 @@ main(int argc, char **argv, char **envp)
 
 #endif
 
+    if (argc >= 2 && strcmp(argv[1], "-r") == 0) {
+        rookie_mode = TRUE;
+        argc--;
+        argv++;
+    }
+
     /*
      * get home and options from environment
      */
@@ -70,12 +76,6 @@ main(int argc, char **argv, char **envp)
      * Drop setuid/setgid after opening the scoreboard file. 
      */ 
     md_normaluser();
-
-    if (argc == 2 && strcmp(argv[1], "-r") == 0) {
-        rookie_mode = TRUE;
-        argc--;
-        argv++;
-    }
 
     /*
      * check for print-score option

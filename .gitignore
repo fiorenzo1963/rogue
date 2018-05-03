@@ -11,4 +11,4 @@ core
 *.o
 rogue
 findpw
-rogue.scr
+*.scr
