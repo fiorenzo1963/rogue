@@ -48,6 +48,13 @@ bool pack_used[26] = {			/* Is the character used in the pack? */
     FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
     FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
 };
+bool rookie_mode = FALSE;               /*
+                                         * True if rookie mode.
+                                         * Gives better weapon and armor.
+                                         * Also increases chances of room
+                                         * full of monsers to gain pts and
+                                         * collect objets quickly.
+                                         */
 
 char dir_ch;				/* Direction from last get_dir() call */
 char file_name[MAXSTR];			/* Save file name */

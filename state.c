@@ -1917,6 +1917,7 @@ rs_save_file(FILE *savef)
     rs_write_int(savef, 0);                         /* 28 */
 #endif
     rs_write_booleans(savef, pack_used, 26);        /* 29 */
+    rs_write_boolean(savef, rookie_mode);
     rs_write_char(savef, dir_ch);
     rs_write_chars(savef, file_name, MAXSTR);
     rs_write_chars(savef, huh, MAXSTR);
@@ -2047,6 +2048,7 @@ rs_restore_file(FILE *inf)
     rs_read_int(inf, &dummyint);                /* 28 */
 #endif
     rs_read_booleans(inf, pack_used, 26);       /* 29 */
+    rs_read_boolean(inf, &rookie_mode);
     rs_read_char(inf, &dir_ch);
     rs_read_chars(inf, file_name, MAXSTR);
     rs_read_chars(inf, huh, MAXSTR);

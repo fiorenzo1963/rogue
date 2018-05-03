@@ -71,30 +71,20 @@ main(int argc, char **argv, char **envp)
      */ 
     md_normaluser();
 
+    if (argc == 2 && strcmp(argv[1], "-r") == 0) {
+        rookie_mode = TRUE;
+        argc--;
+        argv++;
+    }
+
     /*
      * check for print-score option
      */
 
-    if (argc == 2)
-    {
-	if (strcmp(argv[1], "-s") == 0)
-	{
-	    noscore = TRUE;
-	    score(0, -1, 0);
-	    exit(0);
-	}
-	else if (strcmp(argv[1], "-d") == 0)
-	{
-	    dnum = rnd(100);	/* throw away some rnd()s to break patterns */
-	    while (--dnum)
-		rnd(100);
-	    purse = rnd(100) + 1;
-	    level = rnd(100) + 1;
-	    initscr();
-	    getltchars();
-	    death(death_monst());
-	    exit(0);
-	}
+    if (argc == 2 && strcmp(argv[1], "-s") == 0) {
+	noscore = TRUE;
+	score(0, -1, 0);
+	exit(0);
     }
 
     init_check();			/* check for legal startup */

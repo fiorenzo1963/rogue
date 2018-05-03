@@ -32,16 +32,22 @@ init_player()
      */
     obj = new_item();
     obj->o_type = FOOD;
-    obj->o_count = 1;
+    obj->o_count = rookie_mode ? 3 : 1;
     add_pack(obj, TRUE);
     /*
      * And his suit of armor
      */
     obj = new_item();
     obj->o_type = ARMOR;
-    obj->o_which = RING_MAIL;
-    obj->o_arm = a_class[RING_MAIL] - 1;
-    obj->o_flags |= ISKNOW;
+    if (rookie_mode) {
+        obj->o_which = SPLINT_MAIL;
+        obj->o_arm = a_class[SPLINT_MAIL] - 1 - rnd(2);
+        obj->o_flags |= ISKNOW | ISPROT;
+    } else {
+        obj->o_which = RING_MAIL;
+        obj->o_arm = a_class[RING_MAIL] - 1;
+        obj->o_flags |= ISKNOW;
+    }
     obj->o_count = 1;
     cur_armor = obj;
     add_pack(obj, TRUE);
@@ -49,9 +55,9 @@ init_player()
      * Give him his weaponry.  First a mace.
      */
     obj = new_item();
-    init_weapon(obj, MACE);
-    obj->o_hplus = 1;
-    obj->o_dplus = 1;
+    init_weapon(obj, rookie_mode ? TWOSWORD : MACE);
+    obj->o_hplus = 1 + (rookie_mode ? rnd(2) : 0);
+    obj->o_dplus = 1 + (rookie_mode ? rnd(2) : 0);
     obj->o_flags |= ISKNOW;
     add_pack(obj, TRUE);
     cur_weapon = obj;

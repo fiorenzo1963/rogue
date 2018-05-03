@@ -16,6 +16,7 @@
 #include "rogue.h"
 
 #define TREAS_ROOM 20	/* one chance in TREAS_ROOM for a treasure room */
+#define TREAS_ROOM_ROOKIE 3 /* ditto for rookie mode */
 #define MAXTREAS 10	/* maximum number of treasures in a treasure room */
 #define MINTREAS 2	/* minimum number of treasures in a treasure room */
 
@@ -135,7 +136,7 @@ put_things()
     /*
      * check for treasure rooms, and if so, put it in.
      */
-    if (rnd(TREAS_ROOM) == 0)
+    if (rnd(rookie_mode ? TREAS_ROOM_ROOKIE : TREAS_ROOM) == 0)
 	treas_room();
     /*
      * Do MAXOBJ attempts to put things on a level
