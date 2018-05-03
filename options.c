@@ -266,7 +266,7 @@ get_str(void *vopt, WINDOW *win)
     {
 	if (c == -1)
 	    continue;
-	else if (c == erasechar())	/* process erase character */
+	else if (md_is_erasechar(c))	/* process erase character */
 	{
 	    if (sp > buf)
 	    {

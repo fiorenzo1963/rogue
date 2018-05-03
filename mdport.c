@@ -110,9 +110,16 @@
 
 #define NOOP(x) (x += 0)
 
+#ifdef HAVE_TERMIOS_H
+static struct termios t_attr;
+#endif
+
 void
 md_init()
 {
+#ifdef HAVE_TERMIOS_H
+    tcgetattr(STDIN_FILENO, &t_attr);
+#endif
 #if defined(__INTERIX)
     char *term;
 
@@ -662,7 +669,7 @@ md_getpass(char *prompt)
             break;
 
         /* Back up on backspace */
-        if (c == '\b')
+        if (md_is_erasechar(c))
         {
             if (count)
                 count--;
@@ -691,27 +698,31 @@ md_getpass(char *prompt)
 #endif
 }
 
+/*
+ * Linux implementation of libncurses replaces delete character (^?)
+ * with '\b' as erase char, not sure why, but here we deal with both.
+ */
 int
-md_erasechar()
+md_is_erasechar(char c)
 {
-#ifdef HAVE_ERASECHAR
-    return( erasechar() ); /* process erase character */
-#elif defined(VERASE)
-    return(_tty.c_cc[VERASE]); /* process erase character */
+#ifdef HAVE_TERMIOS_H
+    return(c == t_attr.c_cc[VERASE] || c == '\b');
+#elif HAVE_ERASECHAR
+    return(c == erasechar() || c == '\b');
 #else
-    return(_tty.sg_erase); /* process erase character */
+    return(c == '\b'); /* default to backspace if all else fails */
 #endif
 }
 
 int
 md_killchar()
 {
-#ifdef HAVE_KILLCHAR
-    return( killchar() );
-#elif defined(VKILL)
-    return(_tty.c_cc[VKILL]);
+#ifdef HAVE_TERMIOS_H
+    return(t_attr.c_cc[VKILL]);
+#elif HAVE_KILLCHAR
+    return(killchar());
 #else
-    return(_tty.sg_kill);
+    return(0x15); /* default to ^U if all else fails */
 #endif
 }
 

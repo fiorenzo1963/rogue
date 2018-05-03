@@ -166,7 +166,7 @@ int	checkout();
 int	md_chmod(char *filename, int mode);
 char	*md_crypt(char *key, char *salt);
 int	md_dsuspchar();
-int	md_erasechar();
+int	md_is_erasechar(char c);
 char	*md_gethomedir();
 char	*md_getusername();
 int	md_getuid();
