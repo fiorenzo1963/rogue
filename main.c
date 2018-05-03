@@ -61,22 +61,19 @@ main(int argc, char **argv, char **envp)
 	dnum = atoi(getenv("SEED"));
     else
 #endif
-	dnum = lowtime + md_getpid();
+    dnum = lowtime + md_getpid();
     seed = dnum;
 
     open_score();
 
-	/* 
+    /* 
      * Drop setuid/setgid after opening the scoreboard file. 
      */ 
-
     md_normaluser();
 
     /*
      * check for print-score option
      */
-
-	md_normaluser(); /* we drop any setgid/setuid priveldges here */
 
     if (argc == 2)
     {
@@ -111,6 +108,8 @@ main(int argc, char **argv, char **envp)
 #endif
 	printf("Hello %s, just a moment while I dig the dungeon...", whoami);
     fflush(stdout);
+
+    md_sleep(2); /* allow enough time to see the message */
 
     initscr();				/* Start up cursor package */
     init_probs();			/* Set up prob tables for objects */
