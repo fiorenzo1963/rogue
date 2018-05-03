@@ -163,8 +163,8 @@ dist.src:
 	gzip -f $(DISTNAME)-src.tar
 	rm -fr $(DISTNAME)
 
-findpw: findpw.c xcrypt.o mdport.o xcrypt.o
-	$(CC) -s -o findpw findpw.c xcrypt.o mdport.o -lcurses
+findpw: findpw.c xcrypt.o
+	$(CC) -s -o findpw findpw.c xcrypt.o
 
 scedit: scedit.o scmisc.o vers.o mdport.o xcrypt.o
 	$(CC) -s -o scedit vers.o scedit.o scmisc.o mdport.o xcrypt.o -lcurses

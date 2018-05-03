@@ -125,7 +125,8 @@
 #define LAMPDIST	3
 #ifdef MASTER
 #ifndef PASSWD
-#define	PASSWD		"mTBellIQOsLNA"
+//#define	PASSWD		"mTBellIQOsLNA"
+#define	PASSWD		"mTczFhLjf1gLg"
 #endif
 #endif
 
