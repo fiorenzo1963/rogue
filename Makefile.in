@@ -137,14 +137,14 @@ clean:
 	$(RM) $(OBJS2)
 	$(RM) core a.exe a.out a.exe.stackdump $(PROGRAM) $(PROGRAM).exe
 	$(RM) $(PROGRAM).tar $(PROGRAM).tar.gz $(PROGRAM).zip 
-	$(RM) $(DISTNAME)/*
-	-rmdir $(DISTNAME)
-    
-maintainer-clean:
+	$(RM) *.log *.out
+	$(RM) -rf $(DISTNAME)
+
+maintainer-clean: clean
 	$(RM) config.h
 	$(RM) Makefile
 	$(RM) config.status
-	$(RM) -r autom4te.cache
+	$(RM) -rf autom4te.cache
 	$(RM) config.log
 	$(RM) $(PROGRAM).scr $(PROGRAM).lck
 

@@ -86,10 +86,14 @@ init_check()
 	printf("Sorry, %s, but the system is too loaded now.\n", whoami);
 	printf("Try again later.  Meanwhile, why not enjoy a%s %s?\n",
 	    vowelstr(fruit), fruit);
-	if (author())
+	if (author()) {
 	    printf("However, since you're a good guy, it's up to you\n");
-	else
+            fflush(stdout);
+            sleep(2);
+	} else {
+            fflush(stdout);
 	    exit(1);
+        }
     }
 #endif
 }

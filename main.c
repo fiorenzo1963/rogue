@@ -84,6 +84,7 @@ main(int argc, char **argv, char **envp)
     if (argc == 2 && strcmp(argv[1], "-s") == 0) {
 	noscore = TRUE;
 	score(0, -1, 0);
+        md_deinit();
 	exit(0);
     }
 
@@ -99,7 +100,7 @@ main(int argc, char **argv, char **envp)
 	printf("Hello %s, just a moment while I dig the dungeon...", whoami);
     fflush(stdout);
 
-    md_sleep(2); /* allow enough time to see the message */
+    md_sleep(1); /* allow enough time to see the message */
 
     initscr();				/* Start up cursor package */
     init_probs();			/* Set up prob tables for objects */
@@ -115,8 +116,9 @@ main(int argc, char **argv, char **envp)
      */
     if (LINES < NUMLINES || COLS < NUMCOLS)
     {
-	printf("\nSorry, the screen must be at least %dx%d\n", NUMLINES, NUMCOLS);
 	endwin();
+	printf("\nSorry, the screen must be at least %dx%d\n", NUMLINES, NUMCOLS);
+        fflush(stdout);
 	my_exit(1);
     }
 
@@ -379,6 +381,7 @@ void
 my_exit(int st)
 {
     resetltchars();
+    md_deinit();
     exit(st);
 }
 

@@ -114,9 +114,16 @@
 static struct termios t_attr;
 #endif
 
+#ifdef __GNU_LIBRARY__
+#include <mcheck.h>
+#endif
+
 void
 md_init()
 {
+#ifdef __GNU_LIBRARY__
+    mtrace();
+#endif
 #ifdef HAVE_TERMIOS_H
     tcgetattr(STDIN_FILENO, &t_attr);
 #endif
@@ -141,6 +148,14 @@ md_init()
 	md_onsignal_default();
 #else
 	md_onsignal_exit();
+#endif
+}
+
+void
+md_deinit()
+{
+#ifdef __GNU_LIBRARY__
+    muntrace();
 #endif
 }
 
@@ -567,6 +582,9 @@ md_shellescape()
 
     if (pid == 0) /* Shell Process */
     {
+#ifdef __GNU_LIBRARY__
+        muntrace();
+#endif
         /*
          * Set back to original user, just in case
          */
@@ -661,8 +679,12 @@ md_getpass(char *prompt)
         c = _getch();
 
         /* Exit on interrupt (^c or ^break) */
-        if (c == '\003' || c == 0x100)
+        if (c == '\003' || c == 0x100) {
+#ifdef __GNU_LIBRARY__
+            muntrace();
+#endif
             exit(1);
+        }
 
         /* Terminate on end of line or file (^j, ^m, ^d, ^z) */
         if (c == '\r' || c == '\n' || c == '\004' || c == '\032')

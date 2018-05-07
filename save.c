@@ -140,6 +140,7 @@ void
 save_file(FILE *savef)
 {
     char buf[80];
+    clear();
     mvcur(0, COLS - 1, LINES - 1, 0); 
     putchar('\n');
     endwin();

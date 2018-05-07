@@ -174,6 +174,7 @@ char	*md_getpass(char *prompt);
 int	md_getpid();
 char	*md_getrealname(int uid);
 void	md_init();
+void	md_deinit();
 int	md_killchar();
 void	md_normaluser();
 void	md_raw_standout();
