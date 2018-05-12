@@ -26,22 +26,6 @@ extern char version[], encstr[];
 
 static STAT sbuf;
 
-bool
-needs_unlink_save_file()
-{
-    bool ret = TRUE;
-#if MASTER
-#ifdef WIZARD
-    if (wizard)
-        ret = FALSE;
-#endif
-    if (rookie_mode)
-        ret = FALSE;
-#endif
-    return ret;
-}
-
-
 /*
  * save_game:
  *	Implement the "save game" command
@@ -131,7 +115,7 @@ gotfile:
 /*
  * auto_save:
  *	Automatically save a file.  This is used if a HUP signal is
- *	received
+ *	recieved
  */
 
 void
@@ -236,11 +220,14 @@ restore(char *file, char **envp)
      * inode for as long as possible
      */
 
-    if (needs_unlink_save_file()) {
-        if (md_unlink_open_file(file, inf) < 0) {
-	    printf("Cannot unlink file\n");
-	    return FALSE;
-        }
+    if (
+#ifdef MASTER
+	!wizard &&
+#endif
+        md_unlink_open_file(file, inf) < 0)
+    {
+	printf("Cannot unlink file\n");
+	return FALSE;
     }
     mpos = 0;
 /*    printw(0, 0, "%s: %s", file, ctime(&sbuf2.st_mtime)); */
@@ -251,13 +238,15 @@ restore(char *file, char **envp)
     /*
      * defeat multiple restarting from the same place
      */
-    if (needs_unlink_save_file()) {
-	if (sbuf2.st_nlink != 1 || syml) {
+#ifdef MASTER
+    if (!wizard)
+#endif
+	if (sbuf2.st_nlink != 1 || syml)
+	{
 	    endwin();
 	    printf("\nCannot restore from a linked file\n");
 	    return FALSE;
 	}
-    }
 
     if (pstats.s_hpt <= 0)
     {
@@ -268,7 +257,6 @@ restore(char *file, char **envp)
 
 	md_tstpresume();
 
-    fclose(inf);
     environ = envp;
     strcpy(file_name, file);
     clearok(curscr, TRUE);
