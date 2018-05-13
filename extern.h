@@ -110,7 +110,7 @@
 #ifdef CTRL
 #undef CTRL
 #endif
-#define CTRL(c)		(c & 037)
+#define CTRL(c)		((c) & 037)
 
 /*
  * Now all the global variables
@@ -131,7 +131,6 @@ void	come_down();
 void	doctor();
 void	end_line();
 void    endit(int sig);
-void	fatal();
 void	getltchars();
 void	land();
 void    leave(int);

@@ -77,6 +77,10 @@ init_player()
     obj->o_count = rnd(15) + 25;
     obj->o_flags |= ISKNOW;
     add_pack(obj, TRUE);
+    /*
+     * Add strength
+     */
+    chg_str(rnd(3));
 }
 
 /*

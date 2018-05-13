@@ -14,9 +14,7 @@
 #include <curses.h>
 #include "rogue.h"
 
-#ifdef MASTER
 int total = 0;			/* total dynamic memory bytes */
-#endif
 
 /*
  * detach:
@@ -84,9 +82,7 @@ _free_list(THING **ptr)
 void
 discard(THING *item)
 {
-#ifdef MASTER
     total--;
-#endif
     free((char *) item);
 }
 
@@ -99,14 +95,10 @@ new_item()
 {
     THING *item;
 
-#ifdef MASTER
     if ((item = calloc(1, sizeof *item)) == NULL)
-	msg("ran out of memory after %d items", total);
+	fatal("ran out of memory after %d items", total);
     else
 	total++;
-#else
-    item = calloc(1, sizeof *item);
-#endif
     item->l_next = NULL;
     item->l_prev = NULL;
     return item;

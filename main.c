@@ -156,20 +156,6 @@ endit(int sig)
 }
 
 /*
- * fatal:
- *	Exit the program, printing a message.
- */
-
-void
-fatal(char *s)
-{
-    mvaddstr(LINES - 2, 0, s);
-    refresh();
-    endwin();
-    my_exit(0);
-}
-
-/*
  * rnd:
  *	Pick a very random number.
  */

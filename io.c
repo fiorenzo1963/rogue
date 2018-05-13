@@ -263,6 +263,31 @@ wait_for(int ch)
 	    continue;
 }
 
+
+/*
+ * fatal:
+ *	Exit the program, printing a message.
+ */
+/* VARARGS */
+void
+fatal(char *fmt, ...)
+{
+    va_list args;
+    static char fatalbuf[MAXSTR];
+
+    /* fake zero coords for show_win */
+    strcpy(fatalbuf, "GAME ERROR: ");
+    va_start(args, fmt);
+    vsprintf(&fatalbuf[strlen(fatalbuf)], fmt, args);
+    va_end(args);
+    strcat(&fatalbuf[strlen(fatalbuf)], " --Quit--");
+    hero.y = 0;
+    hero.x = strlen(fatalbuf);
+    show_win(fatalbuf);
+    endwin();
+    my_exit(3);
+}
+
 /*
  * show_win:
  *	Function used to display a window and wait before returning
@@ -281,4 +306,5 @@ show_win(char *message)
     wait_for(' ');
     clearok(curscr, TRUE);
     touchwin(stdscr);
+         win = hw;
 }

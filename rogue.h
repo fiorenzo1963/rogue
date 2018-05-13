@@ -601,6 +601,7 @@ void	money(int value);
 int	move_monst(THING *tp);
 void	move_msg(THING *obj);
 int	msg(char *fmt, ...);
+void    fatal(char *fmt, ...);
 void	nameit(THING *obj, char *type, char *which, struct obj_info *op, char *(*prfunc)(THING *));
 void	new_level();
 void	new_monster(THING *tp, char type, coord *cp);
