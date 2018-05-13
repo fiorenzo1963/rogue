@@ -759,5 +759,4 @@ extern int      cNWOOD;
 extern char     *metal[];
 extern int      cNMETAL;
 
-#define MAXTRIES        1000
-#define MAXTREASTRIES   100
+#define MAXTRIES        900

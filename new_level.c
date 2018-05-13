@@ -16,16 +16,9 @@
 #include "rogue.h"
 
 #define TREAS_ROOM 20	/* one chance in TREAS_ROOM for a treasure room */
-// #define DEBUG_MANY_OBJECTS
-#ifdef DEBUG_MANY_OBJECTS
-#define TREAS_ROOM_ROOKIE 2 /* ditto for rookie mode */
-#define MAXTREAS 30	/* maximum number of treasures in a treasure room */
-#define MINTREAS 5	/* minimum number of treasures in a treasure room */
-#else
 #define TREAS_ROOM_ROOKIE 3 /* ditto for rookie mode */
-#define MAXTREAS 10	/* maximum number of treasures in a treasure room */
-#define MINTREAS 2	/* minimum number of treasures in a treasure room */
-#endif
+#define MAXTREAS 12	/* maximum number of treasures in a treasure room */
+#define MINTREAS 4	/* minimum number of treasures in a treasure room */
 
 void
 new_level()
