@@ -255,6 +255,8 @@ teleport()
 	    strcpy(monsters['F'-'A'].m_stats.s_dmg, "000x0");
         }
     }
+    else
+        msg("cannot find space to teleport to");
     no_move = 0;
     count = 0;
     running = FALSE;
