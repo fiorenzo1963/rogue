@@ -117,13 +117,14 @@ new_level()
 	    do
 	    {
 		if (find_floor((struct room *) NULL, &stairs, MAXTRIES, FALSE) == FALSE)
-                    goto out;
+                    goto skip;
 	    } while (chat(stairs.y, stairs.x) != FLOOR);
 	    sp = &flat(stairs.y, stairs.x);
 	    *sp &= ~F_REAL;
 	    *sp |= rnd(NTRAPS);
+skip:
+            ;
 	}
-out:
     }
 
     enter_room(&hero);
