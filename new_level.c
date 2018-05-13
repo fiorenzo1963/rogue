@@ -61,6 +61,16 @@ new_level()
     do_rooms();				/* Draw rooms */
     do_passages();			/* Draw passages */
     no_food++;
+
+    /*
+     * Place first objects which we cannot do without
+     */
+
+    /*
+     * Now place objects things which we cannot do without
+     */
+    populate_rooms();                   /* Populate rooms */
+
     put_things();			/* Place objects (if any) */
     /*
      * Place the traps

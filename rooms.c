@@ -113,6 +113,21 @@ do_rooms()
 		rp->r_pos.y = top.y + rnd(bsze.y - rp->r_max.y);
 	    } until (rp->r_pos.y != 0);
 	draw_room(rp);
+    }
+}
+
+/*
+ * populate_rooms:
+ *	Place gold and monster
+ */
+
+void
+populate_rooms()
+{
+    int i;
+    struct room *rp;
+    for (i = 0, rp = rooms; i < MAXROOMS; rp++, i++)
+    {
 	/*
 	 * Put the gold in
 	 */
@@ -135,10 +150,12 @@ do_rooms()
 	 */
 	if (rnd(100) < (rp->r_goldval > 0 ? 80 : 25))
 	{
-	    tp = new_item();
-	    find_floor(rp, &mp, NOLIMIT, TRUE);
-	    new_monster(tp, randmonster(FALSE), &mp);
-	    give_pack(tp);
+            coord mp;
+	    if (find_floor(rp, &mp, MAXTRIES, TRUE) == TRUE) {
+                THING *tp = new_item();
+	        new_monster(tp, randmonster(FALSE), &mp);
+	        give_pack(tp);
+            }
 	}
     }
 }
