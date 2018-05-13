@@ -80,6 +80,11 @@ new_level()
     seenstairs = FALSE;
 
     /*
+     * Place amulet.
+     */
+    put_amulet();
+
+    /*
      * Now place objects things which we cannot do without
      */
     populate_rooms();                   /* Populate rooms */
@@ -138,51 +143,27 @@ rnd_room()
 }
 
 /*
- * put_things:
- *	Put potions and scrolls on this level
+ * put_amulet:
+ *	Put amulet
  */
 
 void
-put_things()
+put_amulet()
 {
-    int i;
-    THING *obj;
-
     /*
      * Once you have found the amulet, the only way to get new stuff is
      * go down into the dungeon.
      */
     if (amulet && level < max_level)
 	return;
-    /*
-     * check for treasure rooms, and if so, put it in.
-     */
-    if (rnd(rookie_mode ? TREAS_ROOM_ROOKIE : TREAS_ROOM) == 0)
-	treas_room();
-    /*
-     * Do MAXOBJ attempts to put things on a level
-     */
-    for (i = 0; i < MAXOBJ; i++)
-	if (rnd(100) < 36)
-	{
-	    /*
-	     * Pick a new object and link it in the list
-	     */
-	    obj = new_thing();
-	    attach(lvl_obj, obj);
-	    /*
-	     * Put it somewhere
-	     */
-	    find_floor((struct room *) NULL, &obj->o_pos, NOLIMIT, FALSE);
-	    chat(obj->o_pos.y, obj->o_pos.x) = (char) obj->o_type;
-	}
+
     /*
      * If he is really deep in the dungeon and he hasn't found the
      * amulet yet, put it somewhere on the ground
      */
     if (level >= AMULETLEVEL && !amulet)
     {
-	obj = new_item();
+	THING *obj = new_item();
 	attach(lvl_obj, obj);
 	obj->o_hplus = 0;
 	obj->o_dplus = 0;
@@ -195,6 +176,52 @@ put_things()
 	 */
 	find_floor((struct room *) NULL, &obj->o_pos, NOLIMIT, FALSE);
 	chat(obj->o_pos.y, obj->o_pos.x) = AMULET;
+    }
+}
+
+/*
+ * put_things:
+ *	Put potions and scrolls on this level
+ */
+
+void
+put_things()
+{
+    int i;
+
+    /*
+     * Once you have found the amulet, the only way to get new stuff is
+     * go down into the dungeon.
+     */
+    if (amulet && level < max_level)
+	return;
+    /*
+     * check for treasure rooms, and if so, put it in.
+     */
+    if (rnd(rookie_mode ? TREAS_ROOM_ROOKIE : TREAS_ROOM) == 0)
+	treas_room();
+
+    /*
+     * Do MAXOBJ attempts to put things on a level
+     */
+    for (i = 0; i < MAXOBJ; i++)
+    {
+	if (rnd(100) < 36)
+	{
+            coord mp;
+	    if (find_floor((struct room *) NULL, &mp, MAXTRIES, FALSE) == TRUE) {
+	        /*
+	         * Pick a new object and link it in the list
+	         */
+                THING *obj = new_thing();
+                obj->o_pos = mp;
+	        attach(lvl_obj, obj);
+	        /*
+	         * Put it somewhere
+	         */
+	        chat(obj->o_pos.y, obj->o_pos.x) = (char) obj->o_type;
+            }
+	}
     }
 }
 
