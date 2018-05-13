@@ -70,12 +70,9 @@ fight(coord *mp, THING *weap, bool thrown)
     /*
      * Find the monster we want to fight
      */
-#ifdef MASTER
-    if ((tp = moat(mp->y, mp->x)) == NULL)
-	debug("Fight what @ %d,%d", mp->y, mp->x);
-#else
     tp = moat(mp->y, mp->x);
-#endif
+    if (tp == NULL)
+	fatal("Fight what @ %d,%d", mp->y, mp->x);
     /*
      * Since we are fighting, things are not quiet so no healing takes
      * place.

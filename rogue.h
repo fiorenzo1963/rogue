@@ -685,7 +685,9 @@ bool	chase(THING *tp, coord *ee);
 bool	diag_ok(coord *sp, coord *ep);
 bool	dropcheck(THING *obj);
 bool	fallpos(coord *pos, coord *newpos);
-#define NOLIMIT 0
+#define NOLIMIT                 0
+#define MAXTRIES              900
+#define MAXTRIES_TREAS        200
 bool	find_floor(struct room *rp, coord *cp, int limit, bool monst);
 bool	is_magic(THING *obj);
 bool    is_symlink(char *sp); 
@@ -758,5 +760,3 @@ extern char     *wood[];
 extern int      cNWOOD;
 extern char     *metal[];
 extern int      cNMETAL;
-
-#define MAXTRIES        900

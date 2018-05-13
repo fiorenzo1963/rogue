@@ -248,7 +248,7 @@ treas_room()
     num_monst = nm = rnd(spots) + MINTREAS;
     while (nm--)
     {
-	if (find_floor(rp, &mp, 2 * MAXTRIES, FALSE) == TRUE) {
+	if (find_floor(rp, &mp, 2 * MAXTRIES_TREAS, FALSE) == TRUE) {
 	    tp = new_thing();
 	    tp->o_pos = mp;
 	    attach(lvl_obj, tp);
@@ -269,7 +269,7 @@ treas_room()
     while (nm--)
     {
 	spots = 0;
-	if (find_floor(rp, &mp, MAXTRIES, TRUE) == TRUE)
+	if (find_floor(rp, &mp, MAXTRIES_TREAS, TRUE) == TRUE)
 	{
 	    tp = new_item();
 	    new_monster(tp, randmonster(FALSE), &mp);
