@@ -107,7 +107,7 @@ void
 open_score()
 {
 #ifdef SCOREFILE
-    char *scorefile = rookie_mode ? "rookie-" SCOREFILE : "veteran-" SCOREFILE;
+    char *scorefile = rookie_mode ? "rookie-" SCOREFILE : "warrior-" SCOREFILE;
      /* 
       * We drop setgid privileges after opening the score file, so subsequent 
       * open()'s will fail.  Just reuse the earlier filehandle. 

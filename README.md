@@ -1,6 +1,6 @@
 # ROGUE
 
-The original version of rogue, version 5.4.4.
+Rogue version 5.4.4.2018.2, derived from version 5.4.4.
 
 Original Copyright:
 ```
@@ -19,7 +19,9 @@ Distribution:
 Distributed under BSD License (see LICENSE.TXT).
 ```
 
+```
 Cloned from https://github.com/Davidslv/rogue.git
+```
 
 Build as follows:
 
@@ -30,14 +32,15 @@ Build as follows:
 ## Options and Features
 
 - This version has modified to run on 2018 versions of MacOS, Linux and FreeBSD.
-  - Several bug fixes.
-  - Added Rookie/Veteran mode. The "R" flag will be shown at the end of the status line when in Rookie mode.
-    - Veteran mode is the original behavior.
+  - Major bug fixes in object placement.
+  - Other minor bug fixes.
+  - Added Rookie/Warrior mode. The "R" flag will be shown at the end of the status line when in Rookie mode.
+    - Warrior mode is the original behavior.
     - Rookie mode gives you better weapon and armor, and much higher chances of finding a roomfull of monsters. This gives you more chances of acquiring resources.
 
-- To run in "Veteran" mode: rogue
+- To run in "Warrior" mode: rogue
 - To run in "Rookie" mode: rogue -r
-- To print scores for "Veteran" mode: rogue -s
+- To print scores for "Warrior" mode: rogue -s
 - To print scores for "Rookie" mode: rogue -r -s
 - To restore a saved game: rogue save_file
 
@@ -45,7 +48,7 @@ Build as follows:
 
 Well, you have the source code, so might as well summarize here messages.
 
-When you quaff a potion:
+### When you quaff a potion
 - "what a tripy feeling", "what's going on here": confusion.
 - "everything seems so cosmic": hallucination.
 - "cloak of dark", "darkness": blindness.
@@ -56,7 +59,7 @@ When you quaff a potion:
 - "you begin to feel much better": extra healing.
 - "... It make you feel warm all over": restore strength.
 
-When you read a scroll:
+### When you read a scroll
 - "your hands begin to glow ...": monster confusion.
 - "your amoror glows ... for a moment": enhance armor.
 - "you feel a strange sense of loss": hold monster.
@@ -72,4 +75,4 @@ When you read a scroll:
 
 ## FIXME
 
-- Delta coordinates
+- Fix handling of delta coordinates

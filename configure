@@ -574,9 +574,10 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 # Identity of this package.
 PACKAGE_NAME='Rogue'
 PACKAGE_TARNAME='rogue'
-PACKAGE_VERSION='5.4.4'
-PACKAGE_STRING='Rogue 5.4.4'
-PACKAGE_BUGREPORT='yendor@rogueforge.net'
+PACKAGE_VERSION='5.4.4.2018.2'
+PACKAGE_STRING='Rogue 5.4.4'.2018.2
+#PACKAGE_BUGREPORT='yendor@rogueforge.net'
+PACKAGE_BUGREPORT='fio@cattaneo.us'
 
 ac_unique_file="armor.c"
 # Factoring default headers for most tests.

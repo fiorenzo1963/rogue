@@ -92,12 +92,11 @@ main(int argc, char **argv, char **envp)
     if (argc == 2)
 	if (!restore(argv[1], envp))	/* Note: restore will never return */
 	    my_exit(1);
+    printf("Hello %s %s, just a moment while I dig the dungeon...", (rookie_mode ? "rookie" : "warrior"), whoami);
 #ifdef MASTER
     if (wizard)
-	printf("Hello %s, welcome to dungeon #%d", whoami, dnum);
-    else
+	printf(" #%d", dnum);
 #endif
-	printf("Hello %s, just a moment while I dig the dungeon...", whoami);
     fflush(stdout);
 
     md_sleep(1); /* allow enough time to see the message */
@@ -118,6 +117,17 @@ main(int argc, char **argv, char **envp)
     {
 	endwin();
 	printf("\nSorry, the screen must be at least %dx%d\n", NUMLINES, NUMCOLS);
+        fflush(stdout);
+	my_exit(1);
+    }
+
+    /*
+     * The screen must be no larger than NUMLINES+2 x NUMCOLS+2
+     */
+    if (LINES > (NUMLINES+2) || COLS > (NUMCOLS+2))
+    {
+	endwin();
+	printf("\nSorry, the screen must no larger than %dx%d\n", NUMLINES+2, NUMCOLS+2);
         fflush(stdout);
 	my_exit(1);
     }

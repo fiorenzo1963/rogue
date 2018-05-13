@@ -160,7 +160,7 @@ score(int amount, int flags, char monst)
      */
     if (flags != -1)
 	putchar('\n');
-    printf("%s Top %s %s:\n", rookie_mode ? "Rookie" : "Veteran", Numname, allscore ? "Scores" : "Rogueists");
+    printf("%s Top %s %s:\n", rookie_mode ? "Rookie" : "Warrior", Numname, allscore ? "Scores" : "Rogueists");
     printf("   Score Name\n");
     for (scp = top_ten; scp < endp; scp++)
     {
