@@ -85,11 +85,18 @@ new_level()
     put_amulet();
 
     /*
-     * Now place objects things which we cannot do without
+     * Place hero.
      */
+    find_floor((struct room *) NULL, &hero, NOLIMIT, TRUE);
+
+    /*
+     * Now place objects things which we can do without if we run out of space
+     */
+
     populate_rooms();                   /* Populate rooms */
 
-    put_things();			/* Place objects (if any) */
+    put_things();			/* Place objects */
+
     /*
      * Place the traps
      */
@@ -119,7 +126,6 @@ new_level()
 out:
     }
 
-    find_floor((struct room *) NULL, &hero, NOLIMIT, TRUE);
     enter_room(&hero);
     mvaddch(hero.y, hero.x, PLAYER);
     if (on(player, SEEMONST))
