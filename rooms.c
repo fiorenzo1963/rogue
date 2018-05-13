@@ -103,8 +103,7 @@ do_rooms()
 		rp->r_pos.y++;
 		rp->r_max.y--;
 	    }
-	}
-	else
+	} else {
 	    do
 	    {
 		rp->r_max.x = rnd(bsze.x - 4) + 4;
@@ -112,6 +111,7 @@ do_rooms()
 		rp->r_pos.x = top.x + rnd(bsze.x - rp->r_max.x);
 		rp->r_pos.y = top.y + rnd(bsze.y - rp->r_max.y);
 	    } until (rp->r_pos.y != 0);
+        }
 	draw_room(rp);
     }
 }
@@ -128,22 +128,24 @@ populate_rooms()
     struct room *rp;
     for (i = 0, rp = rooms; i < MAXROOMS; rp++, i++)
     {
+	if (rp->r_flags & ISGONE)
+            continue;
 	/*
 	 * Put the gold in
 	 */
 	if (rnd(2) == 0 && (!amulet || level >= max_level))
 	{
-	    THING *gold;
-
-	    gold = new_item();
-	    gold->o_goldval = rp->r_goldval = GOLDCALC;
-	    find_floor(rp, &rp->r_gold, NOLIMIT, FALSE);
-	    gold->o_pos = rp->r_gold;
-	    chat(rp->r_gold.y, rp->r_gold.x) = GOLD;
-	    gold->o_flags = ISMANY;
-	    gold->o_group = GOLDGRP;
-	    gold->o_type = GOLD;
-	    attach(lvl_obj, gold);
+            coord mp;
+	    if (find_floor(rp, &mp, MAXTRIES, FALSE) == TRUE) {
+	        THING *gold = new_item();
+	        gold->o_goldval = rp->r_goldval = GOLDCALC;
+	        gold->o_pos = rp->r_gold = mp;
+	        chat(rp->r_gold.y, rp->r_gold.x) = GOLD;
+	        gold->o_flags = ISMANY;
+	        gold->o_group = GOLDGRP;
+	        gold->o_type = GOLD;
+	        attach(lvl_obj, gold);
+            }
 	}
 	/*
 	 * Put the monster in

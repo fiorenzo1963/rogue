@@ -80,7 +80,7 @@ init_player()
     /*
      * Add strength
      */
-    chg_str(rnd(3));
+    chg_str(1 + rnd(3));
 }
 
 /*

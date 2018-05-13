@@ -437,13 +437,9 @@ roomin(coord *cp)
 	 && cp->y <= rp->r_pos.y + rp->r_max.y && rp->r_pos.y <= cp->y)
 	    return rp;
 
-    msg("in some bizarre place (%d, %d)", unc(*cp));
-#ifdef MASTER
-    abort();
+    fatal("in some bizarre place (%d, %d)", unc(*cp));
+    /*NOTREACHED*/
     return NULL;
-#else
-    return NULL;
-#endif
 }
 
 /*

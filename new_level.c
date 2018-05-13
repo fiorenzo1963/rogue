@@ -63,8 +63,21 @@ new_level()
     no_food++;
 
     /*
+     * setup t_room ptr
+     */
+    for (tp = mlist; tp != NULL; tp = next(tp))
+	tp->t_room = roomin(&tp->t_pos);
+
+    /*
      * Place first objects which we cannot do without
      */
+
+    /*
+     * Place the staircase down.
+     */
+    find_floor((struct room *) NULL, &stairs, NOLIMIT, FALSE);
+    chat(stairs.y, stairs.x) = STAIRS;
+    seenstairs = FALSE;
 
     /*
      * Now place objects things which we cannot do without
@@ -98,15 +111,6 @@ new_level()
 	    *sp |= rnd(NTRAPS);
 	}
     }
-    /*
-     * Place the staircase down.
-     */
-    find_floor((struct room *) NULL, &stairs, NOLIMIT, FALSE);
-    chat(stairs.y, stairs.x) = STAIRS;
-    seenstairs = FALSE;
-
-    for (tp = mlist; tp != NULL; tp = next(tp))
-	tp->t_room = roomin(&tp->t_pos);
 
     find_floor((struct room *) NULL, &hero, NOLIMIT, TRUE);
     enter_room(&hero);
