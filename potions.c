@@ -206,11 +206,9 @@ quaff()
 	    do_pot(P_BLIND, TRUE);
 	when P_LEVIT:
 	    do_pot(P_LEVIT, TRUE);
-#ifdef MASTER
 	otherwise:
-	    msg("what an odd tasting potion!");
+	    fatal("what an odd tasting potion #%d!", obj->o_which);
 	    return;
-#endif
     }
     status();
     /*

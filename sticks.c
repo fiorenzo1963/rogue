@@ -235,10 +235,8 @@ skip:
 	    ws_info[obj->o_which].oi_know = TRUE;
 	when WS_NOP:
 	    break;
-#ifdef MASTER
 	otherwise:
-	    msg("what a bizarre schtick!");
-#endif
+	    fatal("what a bizarre schtick #%d!", obj->o_which);
     }
     obj->o_charges--;
 }

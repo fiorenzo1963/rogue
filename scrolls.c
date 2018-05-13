@@ -241,6 +241,7 @@ def:
 		    waddch(hw, FOOD);
 		}
 	    if (ch)
+
 	    {
 		scr_info[S_FDET].oi_know = TRUE;
 		show_win("Your nose tingles and you smell food.--More--");
@@ -300,11 +301,9 @@ def:
 	    }
 	    else
 		msg("you feel a strange sense of loss");
-#ifdef MASTER
 	otherwise:
-	    msg("what a puzzling scroll!");
+	    fatal("what a puzzling scroll #%d!", obj->o_which);
 	    return;
-#endif
     }
     obj = orig_obj;
     look(TRUE);	/* put the result of the scroll on the screen */
