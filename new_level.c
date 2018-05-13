@@ -16,9 +16,16 @@
 #include "rogue.h"
 
 #define TREAS_ROOM 20	/* one chance in TREAS_ROOM for a treasure room */
+// #define DEBUG_MANY_OBJECTS
+#ifdef DEBUG_MANY_OBJECTS
+#define TREAS_ROOM_ROOKIE 2 /* ditto for rookie mode */
+#define MAXTREAS 30	/* maximum number of treasures in a treasure room */
+#define MINTREAS 5	/* minimum number of treasures in a treasure room */
+#else
 #define TREAS_ROOM_ROOKIE 3 /* ditto for rookie mode */
 #define MAXTREAS 10	/* maximum number of treasures in a treasure room */
 #define MINTREAS 2	/* minimum number of treasures in a treasure room */
+#endif
 
 void
 new_level()
@@ -74,7 +81,7 @@ new_level()
 	     */
 	    do
 	    {
-		find_floor((struct room *) NULL, &stairs, FALSE, FALSE);
+		find_floor((struct room *) NULL, &stairs, NOLIMIT, FALSE);
 	    } while (chat(stairs.y, stairs.x) != FLOOR);
 	    sp = &flat(stairs.y, stairs.x);
 	    *sp &= ~F_REAL;
@@ -84,14 +91,14 @@ new_level()
     /*
      * Place the staircase down.
      */
-    find_floor((struct room *) NULL, &stairs, FALSE, FALSE);
+    find_floor((struct room *) NULL, &stairs, NOLIMIT, FALSE);
     chat(stairs.y, stairs.x) = STAIRS;
     seenstairs = FALSE;
 
     for (tp = mlist; tp != NULL; tp = next(tp))
 	tp->t_room = roomin(&tp->t_pos);
 
-    find_floor((struct room *) NULL, &hero, FALSE, TRUE);
+    find_floor((struct room *) NULL, &hero, NOLIMIT, TRUE);
     enter_room(&hero);
     mvaddch(hero.y, hero.x, PLAYER);
     if (on(player, SEEMONST))
@@ -152,7 +159,7 @@ put_things()
 	    /*
 	     * Put it somewhere
 	     */
-	    find_floor((struct room *) NULL, &obj->o_pos, FALSE, FALSE);
+	    find_floor((struct room *) NULL, &obj->o_pos, NOLIMIT, FALSE);
 	    chat(obj->o_pos.y, obj->o_pos.x) = (char) obj->o_type;
 	}
     /*
@@ -172,7 +179,7 @@ put_things()
 	/*
 	 * Put it somewhere
 	 */
-	find_floor((struct room *) NULL, &obj->o_pos, FALSE, FALSE);
+	find_floor((struct room *) NULL, &obj->o_pos, NOLIMIT, FALSE);
 	chat(obj->o_pos.y, obj->o_pos.x) = AMULET;
     }
 }
@@ -181,8 +188,6 @@ put_things()
  * treas_room:
  *	Add a treasure room
  */
-#define MAXTRIES 10	/* max number of tries to put down a monster */
-
 
 void
 treas_room()

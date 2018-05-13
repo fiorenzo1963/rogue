@@ -38,6 +38,9 @@ command()
     do_fuses(BEFORE);
     while (ntimes--)
     {
+#ifdef MASTER
+        check_inventory(pack);
+#endif
 	again = FALSE;
 	if (has_hit)
 	{
@@ -440,6 +443,9 @@ over:
 	    door_stop = FALSE;
 	if (!after)
 	    ntimes++;
+#ifdef MASTER
+        check_inventory(pack);
+#endif
     }
     do_daemons(AFTER);
     do_fuses(AFTER);
@@ -451,6 +457,9 @@ over:
 	search();
     else if (ISRING(RIGHT, R_TELEPORT) && rnd(50) == 0)
 	teleport();
+#ifdef MASTER
+    check_inventory(pack);
+#endif
 }
 
 /*

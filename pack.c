@@ -231,12 +231,16 @@ leave_pack(THING *obj, bool newobj, bool all)
 char
 pack_char()
 {
-    bool *bp;
-
-    for (bp = pack_used; *bp; bp++)
-	continue;
-    *bp = TRUE;
-    return (char)((int)(bp - pack_used) + 'a');
+    char c;
+    for (c = 0; c < MAXPACK; c++) {
+        if (pack_used[c] == FALSE) {
+            pack_used[c] = TRUE;
+            return (c + 'a');
+        }
+    }
+    fatal("pack_char: fatal error -- ran out of pack space");
+    /*NOTREACHED*/
+    return (0);
 }
 
 /*
@@ -315,13 +319,13 @@ pick_up(char ch)
 		break;
 	    default:
 #ifdef MASTER
-		debug("Where did you pick a '%s' up???", unctrl(ch));
+		msg("ERROR: where did you pick a '%s' up???", unctrl(ch));
 #endif
 	    case ARMOR:
 	    case POTION:
 	    case FOOD:
 	    case WEAPON:
-	    case SCROLL:	
+	    case SCROLL:
 	    case AMULET:
 	    case RING:
 	    case STICK:
@@ -501,3 +505,50 @@ reset_last()
     last_dir = l_last_dir;
     last_pick = l_last_pick;
 }
+
+#ifdef MASTER
+void check_inventory(THING *list)
+{
+    int u_pack_char[MAXPACK];
+    int objs = 0;
+    int pos = 0;
+    int i;
+    memset(u_pack_char, 0, sizeof (u_pack_char));
+
+    for (; list != NULL; list = next(list), pos++)
+    {
+	if (list->o_packch < 'a' || list->o_packch > 'z') {
+           msg("ERROR: pack list #%d: bad pack item '%s'", pos, unctrl(list->o_packch));
+        } else {
+           if (u_pack_char[list->o_packch - 'a']) {
+               msg("ERROR: pack list #%d: item '%s' already used", pos, unctrl(list->o_packch));
+           }
+           u_pack_char[list->o_packch - 'a'] = 1;
+           if (pack_used[list->o_packch - 'a'] == FALSE) {
+               msg("ERROR: pack list #%d: item '%s': pack_char not marked as used", pos, unctrl(list->o_packch));
+           }
+        }
+	switch (list->o_type)
+	{
+	    case GOLD:
+	    case ARMOR:
+	    case POTION:
+	    case FOOD:
+	    case WEAPON:
+	    case SCROLL:
+	    case AMULET:
+	    case RING:
+	    case STICK:
+                objs++;
+                break;
+	    default:
+                msg("ERROR: list pos %d: unknown item '%s'", pos, unctrl(list->o_packch));
+        }
+    }
+    for (i = 0; i < MAXPACK; i++) {
+        if (u_pack_char[i] == FALSE && pack_used[i]) {
+            msg("ERROR: pack_char '%s' marked as used", pos, unctrl(i + 'a'));
+        }
+    }
+}
+#endif

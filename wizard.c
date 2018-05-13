@@ -231,7 +231,7 @@ teleport()
     static coord c;
 
     mvaddch(hero.y, hero.x, floor_at());
-    find_floor((struct room *) NULL, &c, FALSE, TRUE);
+    find_floor((struct room *) NULL, &c, NOLIMIT, TRUE);
     if (roomin(&c) != proom)
     {
 	leave_room(&hero);

@@ -158,7 +158,7 @@ do_zap()
 			{
 			    do
 			    {
-				find_floor(NULL, &new_pos, FALSE, TRUE);
+				find_floor(NULL, &new_pos, NOLIMIT, TRUE);
 			    } while (ce(new_pos, hero));
 			}
 			else

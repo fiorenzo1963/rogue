@@ -22,7 +22,7 @@
 #define MAXROOMS	9
 #define MAXTHINGS	9
 #define MAXOBJ		9
-#define MAXPACK		26
+#define MAXPACK		26      /* must be 26 (dependency on 'a'-'z') */
 #define MAXTRAPS	10
 #define AMULETLEVEL	26
 #define	NUMTHINGS	7	/* number of types of things */
@@ -547,6 +547,7 @@ void	do_move(int dy, int dx);
 void	do_passages();
 void	do_pot(int type, bool knowit);
 void	do_rooms();
+void	populate_rooms();
 void	do_run(char ch);
 void	do_zap();
 void	doadd(char *fmt, va_list args);
@@ -591,6 +592,7 @@ void	init_probs();
 void	init_stones();
 void	init_weapon(THING *weap, int which);
 bool	inventory(THING *list, int type);
+void	check_inventory(THING *list);
 void	invis_on();
 void	killed(THING *tp, bool pr);
 void	kill_daemon(void (*func)());
@@ -620,6 +622,7 @@ void	put_bool(void *b);
 void	put_inv_t(void *ip);
 void	put_str(void *str);
 void	put_things();
+void    put_amulet();
 void	putpass(coord *cp);
 void	quaff();
 void	raise_level();
@@ -682,6 +685,7 @@ bool	chase(THING *tp, coord *ee);
 bool	diag_ok(coord *sp, coord *ep);
 bool	dropcheck(THING *obj);
 bool	fallpos(coord *pos, coord *newpos);
+#define NOLIMIT 0
 bool	find_floor(struct room *rp, coord *cp, int limit, bool monst);
 bool	is_magic(THING *obj);
 bool    is_symlink(char *sp); 
@@ -754,3 +758,8 @@ extern char     *wood[];
 extern int      cNWOOD;
 extern char     *metal[];
 extern int      cNMETAL;
+
+//#define MAXTRIES        1000
+//#define MAXTREASTRIES   100
+#define MAXTRIES        10
+#define MAXTREASTRIES   10
