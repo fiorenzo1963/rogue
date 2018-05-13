@@ -121,11 +121,12 @@ wanderer()
     THING *tp;
     static coord cp;
 
-    tp = new_item();
     do
     {
-	find_floor((struct room *) NULL, &cp, NOLIMIT, TRUE);
+	if (find_floor((struct room *) NULL, &cp, MAXTRIES, TRUE) == FALSE)
+            return;
     } while (roomin(&cp) == proom);
+    tp = new_item();
     new_monster(tp, randmonster(TRUE), &cp);
     if (on(player, SEEMONST))
     {

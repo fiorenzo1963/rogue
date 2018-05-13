@@ -40,3 +40,7 @@ Build as follows:
 - To print scores for "Veteran" mode: rogue -s
 - To print scores for "Rookie" mode: rogue -r -s
 - To restore a saved game: rogue save_file
+
+## FIXME
+
+- Delta coordinates

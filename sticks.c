@@ -158,7 +158,8 @@ do_zap()
 			{
 			    do
 			    {
-				find_floor(NULL, &new_pos, NOLIMIT, TRUE);
+				if (find_floor(NULL, &new_pos, MAXTRIES, TRUE) == FALSE)
+                                    goto skip;
 			    } while (ce(new_pos, hero));
 			}
 			else
@@ -169,6 +170,8 @@ do_zap()
 			tp->t_dest = &hero;
 			tp->t_flags |= ISRUN;
 			relocate(tp, &new_pos);
+skip:
+                        ;
 		    }
 		}
 	    }

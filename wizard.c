@@ -230,28 +230,30 @@ teleport()
 {
     static coord c;
 
-    mvaddch(hero.y, hero.x, floor_at());
-    find_floor((struct room *) NULL, &c, NOLIMIT, TRUE);
-    if (roomin(&c) != proom)
+    if (find_floor((struct room *) NULL, &c, MAXTRIES, TRUE) == TRUE)
     {
-	leave_room(&hero);
-	hero = c;
-	enter_room(&hero);
-    }
-    else
-    {
-	hero = c;
-	look(TRUE);
-    }
-    mvaddch(hero.y, hero.x, PLAYER);
-    /*
-     * turn off ISHELD in case teleportation was done while fighting
-     * a Flytrap
-     */
-    if (on(player, ISHELD)) {
-	player.t_flags &= ~ISHELD;
-	vf_hit = 0;
-	strcpy(monsters['F'-'A'].m_stats.s_dmg, "000x0");
+        mvaddch(hero.y, hero.x, floor_at());
+        if (roomin(&c) != proom)
+        {
+	    leave_room(&hero);
+	    hero = c;
+	    enter_room(&hero);
+        }
+        else
+        {
+	    hero = c;
+	    look(TRUE);
+        }
+        mvaddch(hero.y, hero.x, PLAYER);
+        /*
+         * turn off ISHELD in case teleportation was done while fighting
+         * a Flytrap
+         */
+        if (on(player, ISHELD)) {
+	    player.t_flags &= ~ISHELD;
+	    vf_hit = 0;
+	    strcpy(monsters['F'-'A'].m_stats.s_dmg, "000x0");
+        }
     }
     no_move = 0;
     count = 0;
