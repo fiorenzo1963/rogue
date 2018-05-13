@@ -256,7 +256,7 @@ teleport()
         }
     }
     else
-        msg("cannot find space to teleport to");
+        msg("cannot find place to teleport to");
     no_move = 0;
     count = 0;
     running = FALSE;
