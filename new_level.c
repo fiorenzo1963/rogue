@@ -109,12 +109,14 @@ new_level()
 	     */
 	    do
 	    {
-		find_floor((struct room *) NULL, &stairs, NOLIMIT, FALSE);
+		if (find_floor((struct room *) NULL, &stairs, MAXTRIES, FALSE) == FALSE)
+                    goto out;
 	    } while (chat(stairs.y, stairs.x) != FLOOR);
 	    sp = &flat(stairs.y, stairs.x);
 	    *sp &= ~F_REAL;
 	    *sp |= rnd(NTRAPS);
 	}
+out:
     }
 
     find_floor((struct room *) NULL, &hero, NOLIMIT, TRUE);
@@ -246,11 +248,12 @@ treas_room()
     num_monst = nm = rnd(spots) + MINTREAS;
     while (nm--)
     {
-	find_floor(rp, &mp, 2 * MAXTRIES, FALSE);
-	tp = new_thing();
-	tp->o_pos = mp;
-	attach(lvl_obj, tp);
-	chat(mp.y, mp.x) = (char) tp->o_type;
+	if (find_floor(rp, &mp, 2 * MAXTRIES, FALSE) == TRUE) {
+	    tp = new_thing();
+	    tp->o_pos = mp;
+	    attach(lvl_obj, tp);
+	    chat(mp.y, mp.x) = (char) tp->o_type;
+        }
     }
 
     /*
@@ -266,7 +269,7 @@ treas_room()
     while (nm--)
     {
 	spots = 0;
-	if (find_floor(rp, &mp, MAXTRIES, TRUE))
+	if (find_floor(rp, &mp, MAXTRIES, TRUE) == TRUE)
 	{
 	    tp = new_item();
 	    new_monster(tp, randmonster(FALSE), &mp);
