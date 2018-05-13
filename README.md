@@ -30,10 +30,10 @@ Build as follows:
 ## Options and Features
 
 - This version has modified to run on 2018 versions of MacOS, Linux and FreeBSD.
-- Several bug fixes.
-- Added Rookie/Veteran mode. The "R" flag will be shown at the end of the status line when in Rookie mode.
- - Veteran mode is the original behavior.
- - Rookie mode gives you better weapon and armor, and much higher chances of finding a roomfull of monsters. This gives you more chances of acquiring resources.
+  - Several bug fixes.
+  - Added Rookie/Veteran mode. The "R" flag will be shown at the end of the status line when in Rookie mode.
+    - Veteran mode is the original behavior.
+    - Rookie mode gives you better weapon and armor, and much higher chances of finding a roomfull of monsters. This gives you more chances of acquiring resources.
 
 - To run in "Veteran" mode: rogue
 - To run in "Rookie" mode: rogue -r
