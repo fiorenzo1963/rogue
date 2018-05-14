@@ -123,7 +123,7 @@ wanderer()
 
     do
     {
-	if (find_floor((struct room *) NULL, &cp, MAXTRIES, TRUE) == FALSE)
+	if (!find_floor((struct room *) NULL, &cp, MAXTRIES, TRUE, FF_NOHERO))
             return;
     } while (roomin(&cp) == proom);
     tp = new_item();

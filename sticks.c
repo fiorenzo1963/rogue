@@ -158,7 +158,7 @@ do_zap()
 			{
 			    do
 			    {
-				if (find_floor(NULL, &new_pos, MAXTRIES, TRUE) == FALSE)
+				if (!find_floor(NULL, &new_pos, MAXTRIES, TRUE, 0x0))
                                     goto skip;
 			    } while (ce(new_pos, hero));
 			}

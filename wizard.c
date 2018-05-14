@@ -228,9 +228,9 @@ create_obj()
 void
 teleport()
 {
-    static coord c;
+    coord c;
 
-    if (find_floor((struct room *) NULL, &c, MAXTRIES, TRUE) == TRUE)
+    if (find_floor((struct room *) NULL, &c, MAXTRIES, TRUE, 0x0))
     {
         mvaddch(hero.y, hero.x, floor_at());
         if (roomin(&c) != proom)

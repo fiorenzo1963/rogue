@@ -68,7 +68,7 @@ new_level()
     /*
      * Place the staircase down.
      */
-    find_floor((struct room *) NULL, &stairs, NOLIMIT, FALSE);
+    find_floor((struct room *) NULL, &stairs, NOLIMIT, FALSE, 0x0);
     chat(stairs.y, stairs.x) = STAIRS;
     seenstairs = FALSE;
 
@@ -80,7 +80,7 @@ new_level()
     /*
      * Place hero.
      */
-    find_floor((struct room *) NULL, &hero, NOLIMIT, TRUE);
+    find_floor((struct room *) NULL, &hero, NOLIMIT, TRUE, 0x0);
 
     /*
      * Now place objects things which we can do without if we run out of space
@@ -109,7 +109,7 @@ new_level()
 	     */
 	    do
 	    {
-		if (find_floor((struct room *) NULL, &stairs, MAXTRIES, FALSE) == FALSE)
+		if (!find_floor((struct room *) NULL, &stairs, MAXTRIES, FALSE, FF_NOHERO))
                     goto skip;
 	    } while (chat(stairs.y, stairs.x) != FLOOR);
 	    sp = &flat(stairs.y, stairs.x);
@@ -176,7 +176,7 @@ put_amulet()
 	/*
 	 * Put it somewhere
 	 */
-	find_floor((struct room *) NULL, &obj->o_pos, NOLIMIT, FALSE);
+	find_floor((struct room *) NULL, &obj->o_pos, NOLIMIT, FALSE, FF_NOTRAP);
 	chat(obj->o_pos.y, obj->o_pos.x) = AMULET;
     }
 }
@@ -211,7 +211,7 @@ put_things()
 	if (rnd(100) < 36)
 	{
             coord mp;
-	    if (find_floor((struct room *) NULL, &mp, MAXTRIES, FALSE) == TRUE) {
+	    if (find_floor((struct room *) NULL, &mp, MAXTRIES, FALSE, 0x0)) {
 	        /*
 	         * Pick a new object and link it in the list
 	         */
@@ -248,7 +248,7 @@ treas_room()
     num_monst = nm = rnd(spots) + MINTREAS;
     while (nm--)
     {
-	if (find_floor(rp, &mp, 2 * MAXTRIES_TREAS, FALSE) == TRUE) {
+	if (find_floor(rp, &mp, 2 * MAXTRIES_TREAS, FALSE, 0x0)) {
 	    tp = new_thing();
 	    tp->o_pos = mp;
 	    attach(lvl_obj, tp);
@@ -269,7 +269,7 @@ treas_room()
     while (nm--)
     {
 	spots = 0;
-	if (find_floor(rp, &mp, MAXTRIES_TREAS, TRUE) == TRUE)
+	if (find_floor(rp, &mp, MAXTRIES_TREAS, TRUE, FF_NOHERO))
 	{
 	    tp = new_item();
 	    new_monster(tp, randmonster(FALSE), &mp);

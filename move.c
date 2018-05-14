@@ -255,6 +255,14 @@ door_open(struct room *rp)
 		    wake_monster(y, x);
 }
 
+bool
+is_trap(coord *tc)
+{
+    PLACE *pp = INDEX(tc->y, tc->x);
+    pp->p_ch = TRAP;
+    return ((pp->p_flags & F_TMASK) != 0);
+}
+
 /*
  * be_trapped:
  *	The guy stepped on a trap.... Make him pay.

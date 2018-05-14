@@ -582,6 +582,7 @@ void	lengthen(void (*func)(), int xtime);
 void	look(bool wakeup);
 int	hit_monster(int y, int x, THING *obj);
 void	identify();
+bool    is_trap(coord *tc);
 void	illcom(int ch);
 void	init_check();
 void	init_colors();
@@ -688,7 +689,9 @@ bool	fallpos(coord *pos, coord *newpos);
 #define NOLIMIT                 0
 #define MAXTRIES              900
 #define MAXTRIES_TREAS        200
-bool	find_floor(struct room *rp, coord *cp, int limit, bool monst);
+#define FF_NOTRAP             0x1       /* do not set coordinates on a trap */
+#define FF_NOHERO             0x2       /* do not set coordinates on hero */
+bool	find_floor(struct room *rp, coord *cp, int limit, bool monst, int flags);
 bool	is_magic(THING *obj);
 bool    is_symlink(char *sp); 
 bool	levit_check();

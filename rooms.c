@@ -125,6 +125,7 @@ void
 populate_rooms()
 {
     int i;
+    int cnt;
     struct room *rp;
     for (i = 0, rp = rooms; i < MAXROOMS; rp++, i++)
     {
@@ -136,7 +137,8 @@ populate_rooms()
 	if (rnd(2) == 0 && (!amulet || level >= max_level))
 	{
             coord mp;
-	    if (find_floor(rp, &mp, MAXTRIES, FALSE) == TRUE) {
+	    if (find_floor(rp, &mp, MAXTRIES, FALSE, 0x0))
+            {
 	        THING *gold = new_item();
 	        gold->o_goldval = rp->r_goldval = GOLDCALC;
 	        gold->o_pos = rp->r_gold = mp;
@@ -150,10 +152,12 @@ populate_rooms()
 	/*
 	 * Put the monster in
 	 */
-	if (rnd(100) < (rp->r_goldval > 0 ? 80 : 25))
+        cnt = 2;
+	while (cnt-- && rnd(100) < (rp->r_goldval > 0 ? 80 : 25))
 	{
             coord mp;
-	    if (find_floor(rp, &mp, MAXTRIES, TRUE) == TRUE) {
+	    if (find_floor(rp, &mp, MAXTRIES, TRUE, FF_NOHERO))
+            {
                 THING *tp = new_item();
 	        new_monster(tp, randmonster(FALSE), &mp);
 	        give_pack(tp);
@@ -351,7 +355,7 @@ rnd_pos(struct room *rp, coord *cp)
  *	pick a new room each time around the loop.
  */
 bool
-find_floor(struct room *rp, coord *cp, int limit, bool monst)
+find_floor(struct room *rp, coord *cp, int limit, bool monst, int fflags)
 {
     PLACE *pp;
     int cnt;
@@ -374,6 +378,16 @@ find_floor(struct room *rp, coord *cp, int limit, bool monst)
 	}
 	rnd_pos(rp, cp);
 	pp = INDEX(cp->y, cp->x);
+        if ((fflags & FF_NOHERO) != 0 && cp->y == hero.y && cp->x == hero.x)
+        {
+            /* coordinate requested different from hero position */
+            continue;
+        }
+        if ((fflags & FF_NOTRAP) != 0 && is_trap(cp))
+        {
+            /* coordinate requested different from trap position */
+            continue;
+        }
 	if (monst)
 	{
 	    if (pp->p_monst == NULL && step_ok(pp->p_ch))
