@@ -517,15 +517,19 @@ void check_inventory(THING *list)
 
     for (; list != NULL; list = next(list), pos++)
     {
+        if (list->o_packch == 0) {
+            msg("WARNING: pack list #%d: type '%s' is not selectable", pos, unctrl(list->o_type));
+            continue;
+        }
 	if (list->o_packch < 'a' || list->o_packch > 'z') {
-           msg("ERROR: pack list #%d: bad pack item '%s'", pos, unctrl(list->o_packch));
+           msg("ERROR: pack list #%d: bad pack type '%s' item '%s'", pos, unctrl(list->o_type), unctrl(list->o_packch));
         } else {
            if (u_pack_char[list->o_packch - 'a']) {
-               msg("ERROR: pack list #%d: item '%s' already used", pos, unctrl(list->o_packch));
+               msg("ERROR: pack list #%d: type '%s' item '%s' already used", pos, unctrl(list->o_type), unctrl(list->o_packch));
            }
            u_pack_char[list->o_packch - 'a'] = 1;
            if (pack_used[list->o_packch - 'a'] == FALSE) {
-               msg("ERROR: pack list #%d: item '%s': pack_char not marked as used", pos, unctrl(list->o_packch));
+               msg("ERROR: pack list #%d: type '%s' item '%s': pack_char not marked as used", pos, unctrl(list->o_type), unctrl(list->o_packch));
            }
         }
 	switch (list->o_type)
@@ -542,12 +546,12 @@ void check_inventory(THING *list)
                 objs++;
                 break;
 	    default:
-                msg("ERROR: list pos %d: unknown item '%s'", pos, unctrl(list->o_packch));
+                msg("ERROR: list pos %d: unknown type '%s' item '%s'", pos, unctrl(list->o_type), unctrl(list->o_packch));
         }
     }
     for (i = 0; i < MAXPACK; i++) {
         if (u_pack_char[i] == FALSE && pack_used[i]) {
-            msg("ERROR: pack_char '%s' marked as used", pos, unctrl(i + 'a'));
+            msg("ERROR: pack_char '%s' marked as used", unctrl(i + 'a'));
         }
     }
 }

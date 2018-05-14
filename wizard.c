@@ -114,8 +114,9 @@ type_name(int type)
     for (hp = tlist; hp->h_ch; hp++)
 	if (type == hp->h_ch)
 	    return hp->h_desc;
-    /* NOTREACHED */
-    return(0);
+    /*NOTREACHED*/
+    fatal("cannot find type name for '%d'", type);
+    return 0;
 }
 
 #ifdef MASTER

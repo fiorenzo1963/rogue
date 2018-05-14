@@ -29,7 +29,7 @@ read_scroll()
     int i;
     bool discardit = FALSE;
     struct room *cur_room;
-    THING *orig_obj;
+    THING *fd_obj;
     static coord mp;
 
     obj = get_item("read", SCROLL);
@@ -53,7 +53,6 @@ read_scroll()
      */
     discardit = (bool)(obj->o_count == 1);
     leave_pack(obj, FALSE, FALSE);
-    orig_obj = obj;
 
     switch (obj->o_which)
     {
@@ -81,12 +80,15 @@ read_scroll()
 		if (x >= 0 && x < NUMCOLS)
 		    for (y = hero.y - 2; y <= hero.y + 2; y++)
 			if (y >= 0 && y <= NUMLINES - 1)
-			    if ((obj = moat(y, x)) != NULL && on(*obj, ISRUN))
+                        {
+                            THING *tp;
+			    if ((tp = moat(y, x)) != NULL && on(*tp, ISRUN))
 			    {
-				obj->t_flags &= ~ISRUN;
-				obj->t_flags |= ISHELD;
+				tp->t_flags &= ~ISRUN;
+				tp->t_flags |= ISHELD;
 				ch++;
 			    }
+                        }
 	    if (ch)
 	    {
 		addmsg("the monster");
@@ -127,8 +129,7 @@ read_scroll()
 		     */
 		    else if (step_ok(ch = winat(y, x)))
 		    {
-			if (ch == SCROLL
-			    && find_obj(y, x)->o_which == S_SCARE)
+			if (ch == SCROLL && find_obj(y, x)->o_which == S_SCARE)
 				continue;
 			else if (rnd(++i) == 0)
 			{
@@ -140,8 +141,8 @@ read_scroll()
 		msg("you hear a faint cry of anguish in the distance");
 	    else
 	    {
-		obj = new_item();
-		new_monster(obj, randmonster(FALSE), &mp);
+		THING *tp = new_item();
+		new_monster(tp, randmonster(FALSE), &mp);
 	    }
 	when S_ID_POTION:
 	case S_ID_SCROLL:
@@ -221,9 +222,10 @@ def:
 		    }
 		    if (ch != ' ')
 		    {
-			if ((obj = pp->p_monst) != NULL)
-			    obj->t_oldch = ch;
-			if (obj == NULL || !on(player, SEEMONST))
+                        THING *tp;
+			if ((tp = pp->p_monst) != NULL)
+			    tp->t_oldch = ch;
+			if (tp == NULL || !on(player, SEEMONST))
 			    mvaddch(y, x, ch);
 		    }
 		}
@@ -233,15 +235,14 @@ def:
 	     */
 	    ch = FALSE;
 	    wclear(hw);
-	    for (obj = lvl_obj; obj != NULL; obj = next(obj))
-		if (obj->o_type == FOOD)
+	    for (fd_obj = lvl_obj; fd_obj != NULL; fd_obj = next(fd_obj))
+		if (fd_obj->o_type == FOOD)
 		{
 		    ch = TRUE;
-		    wmove(hw, obj->o_pos.y, obj->o_pos.x);
+		    wmove(hw, fd_obj->o_pos.y, fd_obj->o_pos.x);
 		    waddch(hw, FOOD);
 		}
 	    if (ch)
-
 	    {
 		scr_info[S_FDET].oi_know = TRUE;
 		show_win("Your nose tingles and you smell food.--More--");
@@ -305,7 +306,6 @@ def:
 	    fatal("what a puzzling scroll #%d!", obj->o_which);
 	    return;
     }
-    obj = orig_obj;
     look(TRUE);	/* put the result of the scroll on the screen */
     status();
 
