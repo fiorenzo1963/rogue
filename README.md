@@ -76,3 +76,4 @@ Well, you have the source code, so might as well summarize here messages.
 ## FIXME
 
 - Fix handling of delta coordinates
+- Still need to fix more object bugs in pack list
