@@ -288,6 +288,7 @@ attack(THING *mp)
 		when 'N':
 		{
 		    register THING *obj, *steal;
+                    int nobj;
 
 		    /*
 		     * Nymph's steal a magic item, look through the pack
@@ -297,7 +298,7 @@ attack(THING *mp)
 		    for (nobj = 0, obj = pack; obj != NULL; obj = next(obj))
 			if (obj != cur_armor && obj != cur_weapon
 			    && obj != cur_ring[LEFT] && obj != cur_ring[RIGHT]
-			    && is_magic(obj) && rnd(2) == 0)
+			    && is_magic(obj) && rnd(++nobj) == 0)
 				steal = obj;
 		    if (steal != NULL)
 		    {
