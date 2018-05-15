@@ -165,9 +165,6 @@ md_onsignal_default()
 #ifdef SIGHUP
     signal(SIGHUP, SIG_DFL);
 #endif
-#ifdef SIGQUIT
-    signal(SIGQUIT, SIG_DFL);
-#endif
 #ifdef SIGILL
     signal(SIGILL, SIG_DFL);
 #endif
@@ -186,9 +183,6 @@ md_onsignal_default()
 #ifdef SIGBUS
     signal(SIGBUS, SIG_DFL);
 #endif
-#ifdef SIGSEGV
-    signal(SIGSEGV, SIG_DFL);
-#endif
 #ifdef SIGSYS
     signal(SIGSYS, SIG_DFL);
 #endif
@@ -202,9 +196,6 @@ md_onsignal_exit()
 {
 #ifdef SIGHUP
     signal(SIGHUP, SIG_DFL);
-#endif
-#ifdef SIGQUIT
-    signal(SIGQUIT, exit);
 #endif
 #ifdef SIGILL
     signal(SIGILL, exit);
@@ -224,9 +215,6 @@ md_onsignal_exit()
 #ifdef SIGBUS
     signal(SIGBUS, exit);
 #endif
-#ifdef SIGSEGV
-    signal(SIGSEGV, exit);
-#endif
 #ifdef SIGSYS
     signal(SIGSYS, exit);
 #endif
@@ -240,9 +228,6 @@ md_onsignal_autosave()
 {
 #ifdef SIGHUP
     signal(SIGHUP, auto_save);
-#endif
-#ifdef SIGQUIT
-	signal(SIGQUIT, endit);
 #endif
 #ifdef SIGILL
     signal(SIGILL, auto_save);
@@ -261,9 +246,6 @@ md_onsignal_autosave()
 #endif
 #ifdef SIGBUS
     signal(SIGBUS, auto_save);
-#endif
-#ifdef SIGSEGV
-    signal(SIGSEGV, auto_save);
 #endif
 #ifdef SIGSYS
     signal(SIGSYS, auto_save);
@@ -602,9 +584,9 @@ md_shellescape()
         while (wait(&ret_status) != pid)
             continue;
 	    
-        signal(SIGINT, myquit);
+        signal(SIGINT, myend);
 #ifdef SIGQUIT
-        signal(SIGQUIT, myend);
+        signal(SIGQUIT, myquit);
 #endif
     }
     return(ret_status);

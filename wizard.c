@@ -87,7 +87,7 @@ set_know(THING *obj, struct obj_info *info)
     guess = &info[obj->o_which].oi_guess;
     if (*guess)
     {
-	free(*guess);
+	memfree(*guess);
 	*guess = NULL;
     }
 }

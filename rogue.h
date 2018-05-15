@@ -11,6 +11,7 @@
  */
 
 #include "extern.h"
+#include "dmalloc.h"
 
 #undef lines 
 

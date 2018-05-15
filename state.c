@@ -554,7 +554,7 @@ rs_read_new_string(FILE *inf, char **s)
         buf = NULL;
     else
     { 
-        buf = malloc(len);
+        buf = memalloc(len);
 
         if (buf == NULL)            
             read_error = TRUE;

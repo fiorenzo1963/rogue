@@ -11,6 +11,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include <curses.h>
 #include "rogue.h"
 
@@ -83,7 +84,7 @@ void
 discard(THING *item)
 {
     total--;
-    free((char *) item);
+    memfree((char *) item);
 }
 
 /*
@@ -95,10 +96,11 @@ new_item()
 {
     THING *item;
 
-    if ((item = calloc(1, sizeof *item)) == NULL)
+    if ((item = memalloc(sizeof (THING))) == NULL)
 	fatal("ran out of memory after %d items", total);
     else
 	total++;
+    memset(item, 0, sizeof (THING));
     item->l_next = NULL;
     item->l_prev = NULL;
     return item;

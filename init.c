@@ -294,7 +294,7 @@ init_names()
 	    *cp++ = ' ';
 	}
 	*--cp = '\0';
-	s_names[i] = (char *) malloc((unsigned) strlen(prbuf)+1);
+	s_names[i] = (char *) memalloc((unsigned) strlen(prbuf)+1);
 	strcpy(s_names[i], prbuf);
     }
 }

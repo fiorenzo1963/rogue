@@ -87,7 +87,7 @@ score(int amount, int flags, char monst)
 	    delwin(hw);
     }
 
-    top_ten = (SCORE *) malloc(numscores * sizeof (SCORE));
+    top_ten = (SCORE *) memalloc(numscores * sizeof (SCORE));
     endp = &top_ten[numscores];
     for (scp = top_ten; scp < endp; scp++)
     {
