@@ -52,8 +52,9 @@ add_pack(THING *obj, bool silent)
 
     if (pack == NULL)
     {
+        if (!pack_room(from_floor, obj, TRUE))
+            return;
 	pack = obj;
-	obj->o_packch = pack_char();
 	inpack++;
     }
     else
@@ -77,7 +78,7 @@ add_pack(THING *obj, bool silent)
 		{
 		    if (ISMULT(op->o_type))
 		    {
-			if (!pack_room(from_floor, obj))
+			if (!pack_room(from_floor, obj, FALSE))
 			    return;
 			op->o_count++;
 dump_it:
@@ -105,7 +106,7 @@ dump_it:
 			{
 				op->o_count += obj->o_count;
 				inpack--;
-				if (!pack_room(from_floor, obj))
+				if (!pack_room(from_floor, obj, FALSE))
 				    return;
 				goto dump_it;
 			}
@@ -120,21 +121,20 @@ out:
 
 	if (lp != NULL)
 	{
-	    if (!pack_room(from_floor, obj))
+	    if (!pack_room(from_floor, obj, TRUE))
 		return;
-	    else
-	    {
-		obj->o_packch = pack_char();
-		next(obj) = next(lp);
-		prev(obj) = lp;
-		if (next(lp) != NULL)
-		    prev(next(lp)) = obj;
-		next(lp) = obj;
-	    }
+            next(obj) = next(lp);
+            prev(obj) = lp;
+            if (next(lp) != NULL)
+                prev(next(lp)) = obj;
+            next(lp) = obj;
 	}
     }
 
     obj->o_flags |= ISFOUND;
+
+    if (obj->o_packch < 'a' || obj->o_packch > 'z')
+        fatal("new object does not have a slot '%s'", unctrl(obj->o_packch));
 
     /*
      * If this was the object of something's desire, that monster will
@@ -163,21 +163,32 @@ out:
  *	appropriate message
  */
 bool
-pack_room(bool from_floor, THING *obj)
+pack_room(bool from_floor, THING *obj, bool need_pack_char)
 {
-    if (++inpack > MAXPACK)
+    char ch = 0;
+    if (need_pack_char)
+        ch = pack_char();
+    if (++inpack > MAXPACK || (need_pack_char && ch == 0))
     {
 	if (!terse)
 	    addmsg("there's ");
 	addmsg("no room");
+        if (need_pack_char && ch == 0)
+            addmsg(" for slots");
 	if (!terse)
 	    addmsg(" in your pack");
 	endmsg();
 	if (from_floor)
 	    move_msg(obj);
 	inpack = MAXPACK;
+        /* undo state changes before returning */
+        if (ch != 0)
+	    pack_used[ch - 'a'] = FALSE;
 	return FALSE;
     }
+
+    if (need_pack_char)
+        obj->o_packch = ch;
 
     if (from_floor)
     {
@@ -228,7 +239,7 @@ leave_pack(THING *obj, bool all)
 
 /*
  * pack_char:
- *	Return the next unused pack character.
+ *	Return the next unused pack character, zero if they are all taken.
  */
 char
 pack_char()
@@ -240,8 +251,6 @@ pack_char()
             return (c + 'a');
         }
     }
-    fatal("pack_char: fatal error -- ran out of pack space");
-    /*NOTREACHED*/
     return (0);
 }
 
