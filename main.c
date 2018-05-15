@@ -25,6 +25,10 @@ main(int argc, char **argv, char **envp)
     char *env;
     int lowtime;
 
+    setbuf(stdout, NULL);
+    setbuf(stderr, NULL);
+    setbuf(stdin, NULL);
+
     md_init();
 
 #ifdef MASTER

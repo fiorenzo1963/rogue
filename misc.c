@@ -549,7 +549,7 @@ call_it(struct obj_info *info)
     {
 	if (info->oi_guess)
 	{
-	    free(info->oi_guess);
+	    memfree(info->oi_guess);
 	    info->oi_guess = NULL;
 	}
     }
@@ -559,8 +559,8 @@ call_it(struct obj_info *info)
 	if (get_str(prbuf, stdscr) == NORM)
 	{
 	    if (info->oi_guess != NULL)
-		free(info->oi_guess);
-	    info->oi_guess = malloc((unsigned int) strlen(prbuf) + 1);
+		memfree(info->oi_guess);
+	    info->oi_guess = memalloc((unsigned int) strlen(prbuf) + 1);
 	    strcpy(info->oi_guess, prbuf);
 	}
     }

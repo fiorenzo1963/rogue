@@ -792,8 +792,8 @@ norm:
     if (get_str(prbuf, stdscr) == NORM)
     {
 	if (*guess != NULL)
-	    free(*guess);
-	*guess = malloc((unsigned int) strlen(prbuf) + 1);
+	    memfree(*guess);
+	*guess = memalloc((unsigned int) strlen(prbuf) + 1);
 	strcpy(*guess, prbuf);
     }
 }
