@@ -53,7 +53,7 @@ missile(int ydelta, int xdelta)
 	return;
     if (!dropcheck(obj) || is_current(obj))
 	return;
-    obj = leave_pack(obj, TRUE, FALSE);
+    obj = leave_pack(obj, FALSE);
     do_motion(obj, ydelta, xdelta);
     /*
      * AHA! Here it has hit something.  If it is a wall or a door,
@@ -136,7 +136,7 @@ fall(THING *obj, bool pr)
 	    else
 		mvaddch(fpos.y, fpos.x, obj->o_type);
 	}
-	attach(lvl_obj, obj);
+	attach(&lvl_obj, obj);
 	return;
     }
     if (pr)

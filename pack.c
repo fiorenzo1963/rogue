@@ -42,7 +42,7 @@ add_pack(THING *obj, bool silent)
     if (obj->o_type == SCROLL && obj->o_which == S_SCARE)
 	if (obj->o_flags & ISFOUND)
 	{
-	    detach(lvl_obj, obj);
+	    detach(&lvl_obj, obj);
 	    mvaddch(hero.y, hero.x, floor_ch());
 	    chat(hero.y, hero.x) = (proom->r_flags & ISGONE) ? PASSAGE : FLOOR;
 	    discard(obj);
@@ -181,7 +181,7 @@ pack_room(bool from_floor, THING *obj)
 
     if (from_floor)
     {
-	detach(lvl_obj, obj);
+	detach(&lvl_obj, obj);
 	mvaddch(hero.y, hero.x, floor_ch());
 	chat(hero.y, hero.x) = (proom->r_flags & ISGONE) ? PASSAGE : FLOOR;
     }
@@ -192,34 +192,36 @@ pack_room(bool from_floor, THING *obj)
 /*
  * leave_pack:
  *	take an item out of the pack
+ *
+ * implementation note: the old argument oldobj was
+ * very confusing, lead to complex and hard to understand code,
+ * and to a bug in the nymph code which steal objects.
+ * it's much better to always create a new object and the caller
+ * discard it if needed.
  */
 THING *
-leave_pack(THING *obj, bool newobj, bool all)
+leave_pack(THING *obj, bool all)
 {
-    THING *nobj;
+    THING *nobj = obj;
 
     inpack--;
-    nobj = obj;
     if (obj->o_count > 1 && !all)
     {
 	last_pick = obj;
 	obj->o_count--;
 	if (obj->o_group)
 	    inpack++;
-	if (newobj)
-	{
-	    nobj = new_item();
-	    *nobj = *obj;
-	    next(nobj) = NULL;
-	    prev(nobj) = NULL;
-	    nobj->o_count = 1;
-	}
+        nobj = new_item();
+	*nobj = *obj;
+	next(nobj) = NULL;
+	prev(nobj) = NULL;
+	nobj->o_count = 1;
     }
     else
     {
 	last_pick = NULL;
 	pack_used[obj->o_packch - 'a'] = FALSE;
-	detach(pack, obj);
+	detach(&pack, obj);
     }
     return nobj;
 }
@@ -313,7 +315,7 @@ pick_up(char ch)
 		if (obj == NULL)
 		    return;
 		money(obj->o_goldval);
-		detach(lvl_obj, obj);
+		detach(&lvl_obj, obj);
 		discard(obj);
 		proom->r_goldval = 0;
 		break;
@@ -517,19 +519,23 @@ void check_inventory(THING *list)
 
     for (; list != NULL; list = next(list), pos++)
     {
+        char packch_str[10];
+        char type_str[10];
+        strcpy(packch_str, unctrl(list->o_packch));
+        strcpy(type_str, unctrl(list->o_type));
         if (list->o_packch == 0) {
-            msg("WARNING: pack list #%d: type '%s' is not selectable", pos, unctrl(list->o_type));
+            msg("WARNING: pack list #%d: type '%s' item '%s' is not selectable", pos, type_str, packch_str);
             continue;
         }
 	if (list->o_packch < 'a' || list->o_packch > 'z') {
-           msg("ERROR: pack list #%d: bad pack type '%s' item '%s'", pos, unctrl(list->o_type), unctrl(list->o_packch));
+           msg("ERROR: pack list #%d: bad pack type '%s' item '%s'", pos, type_str, packch_str);
         } else {
            if (u_pack_char[list->o_packch - 'a']) {
-               msg("ERROR: pack list #%d: type '%s' item '%s' already used", pos, unctrl(list->o_type), unctrl(list->o_packch));
+               msg("ERROR: pack list #%d: type '%s' item '%s' already used", pos, type_str, packch_str);
            }
            u_pack_char[list->o_packch - 'a'] = 1;
            if (pack_used[list->o_packch - 'a'] == FALSE) {
-               msg("ERROR: pack list #%d: type '%s' item '%s': pack_char not marked as used", pos, unctrl(list->o_type), unctrl(list->o_packch));
+               msg("ERROR: pack list #%d: type '%s' item '%s': pack_char not marked as used", pos, type_str, packch_str);
            }
         }
 	switch (list->o_type)
@@ -546,12 +552,12 @@ void check_inventory(THING *list)
                 objs++;
                 break;
 	    default:
-                msg("ERROR: list pos %d: unknown type '%s' item '%s'", pos, unctrl(list->o_type), unctrl(list->o_packch));
+                msg("ERROR: list pos %d: unknown type '%s' item '%s'", pos, type_str, packch_str);
         }
     }
     for (i = 0; i < MAXPACK; i++) {
         if (u_pack_char[i] == FALSE && pack_used[i]) {
-            msg("ERROR: pack_char '%s' marked as used", unctrl(i + 'a'));
+            msg("ERROR: unused item '%s' marked as used", unctrl(i + 'a'));
         }
     }
 }

@@ -59,7 +59,6 @@ void
 quaff()
 {
     THING *obj, *tp, *mp;
-    bool discardit = FALSE;
     bool show, trip;
 
     obj = get_item("quaff", POTION);
@@ -83,8 +82,7 @@ quaff()
      * Calculate the effect it has on the poor guy.
      */
     trip = on(player, ISHALU);
-    discardit = (bool)(obj->o_count == 1);
-    leave_pack(obj, FALSE, FALSE);
+    obj = leave_pack(obj, FALSE);
     switch (obj->o_which)
     {
 	case P_CONFUSE:
@@ -217,9 +215,7 @@ quaff()
 
     call_it(&pot_info[obj->o_which]);
 
-    if (discardit)
-	discard(obj);
-    return;
+    discard(obj);
 }
 
 /*

@@ -128,7 +128,7 @@ do_zap()
 			THING *pp;
 
 			pp = tp->t_pack;
-			detach(mlist, tp);
+			detach(&mlist, tp);
 			if (see_monst(tp))
 			    mvaddch(y, x, chat(y, x));
 			oldch = tp->t_oldch;

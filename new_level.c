@@ -45,12 +45,12 @@ new_level()
      * Free up the monsters on the last level
      */
     for (tp = mlist; tp != NULL; tp = next(tp))
-	free_list(tp->t_pack);
-    free_list(mlist);
+	free_list(&tp->t_pack);
+    free_list(&mlist);
     /*
      * Throw away stuff left on the previous level (if anything)
      */
-    free_list(lvl_obj);
+    free_list(&lvl_obj);
     do_rooms();				/* Draw rooms */
     do_passages();			/* Draw passages */
     no_food++;
@@ -166,7 +166,7 @@ put_amulet()
     if (level >= AMULETLEVEL && !amulet)
     {
 	THING *obj = new_item();
-	attach(lvl_obj, obj);
+	attach(&lvl_obj, obj);
 	obj->o_hplus = 0;
 	obj->o_dplus = 0;
 	strncpy(obj->o_damage,"0x0",sizeof(obj->o_damage));
@@ -217,7 +217,7 @@ put_things()
 	         */
                 THING *obj = new_thing();
                 obj->o_pos = mp;
-	        attach(lvl_obj, obj);
+	        attach(&lvl_obj, obj);
 	        /*
 	         * Put it somewhere
 	         */
@@ -251,7 +251,7 @@ treas_room()
 	if (find_floor(rp, &mp, 2 * MAXTRIES_TREAS, FALSE, 0x0)) {
 	    tp = new_thing();
 	    tp->o_pos = mp;
-	    attach(lvl_obj, tp);
+	    attach(&lvl_obj, tp);
 	    chat(mp.y, mp.x) = (char) tp->o_type;
         }
     }

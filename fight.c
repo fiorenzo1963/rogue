@@ -288,7 +288,6 @@ attack(THING *mp)
 		when 'N':
 		{
 		    register THING *obj, *steal;
-		    register int nobj;
 
 		    /*
 		     * Nymph's steal a magic item, look through the pack
@@ -298,15 +297,15 @@ attack(THING *mp)
 		    for (nobj = 0, obj = pack; obj != NULL; obj = next(obj))
 			if (obj != cur_armor && obj != cur_weapon
 			    && obj != cur_ring[LEFT] && obj != cur_ring[RIGHT]
-			    && is_magic(obj) && rnd(++nobj) == 0)
+			    && is_magic(obj) && rnd(2) == 0)
 				steal = obj;
 		    if (steal != NULL)
 		    {
-			remove_mon(&mp->t_pos, moat(mp->t_pos.y, mp->t_pos.x), FALSE);
-                        mp=NULL;
-			leave_pack(steal, FALSE, FALSE);
-			msg("she stole %s!", inv_name(steal, TRUE));
-			discard(steal);
+                        remove_mon(&mp->t_pos, moat(mp->t_pos.y, mp->t_pos.x), FALSE);
+                        mp = NULL;
+                        steal = leave_pack(steal, FALSE);
+                        msg("she stole %s!", inv_name(steal, TRUE));
+                        discard(steal);
 		    }
 		}
 		otherwise:
@@ -599,7 +598,7 @@ remove_mon(coord *mp, THING *tp, bool waskill)
     {
 	nexti = next(obj);
 	obj->o_pos = tp->t_pos;
-	detach(tp->t_pack, obj);
+	detach(&tp->t_pack, obj);
 	if (waskill)
 	    fall(obj, FALSE);
 	else
@@ -607,7 +606,7 @@ remove_mon(coord *mp, THING *tp, bool waskill)
     }
     moat(mp->y, mp->x) = NULL;
     mvaddch(mp->y, mp->x, tp->t_oldch);
-    detach(mlist, tp);
+    detach(&mlist, tp);
     if (on(*tp, ISTARGET))
     {
 	kamikaze = FALSE;
@@ -650,7 +649,7 @@ killed(THING *tp, bool pr)
 		if (save(VS_MAGIC))
 		    gold->o_goldval += GOLDCALC + GOLDCALC
 				     + GOLDCALC + GOLDCALC;
-		attach(tp->t_pack, gold);
+		attach(&tp->t_pack, gold);
 	    }
 	}
     }

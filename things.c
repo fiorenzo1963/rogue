@@ -155,11 +155,11 @@ drop()
 	return;
     if (!dropcheck(obj))
 	return;
-    obj = leave_pack(obj, TRUE, (bool)!ISMULT(obj->o_type));
+    obj = leave_pack(obj, (bool)!ISMULT(obj->o_type));
     /*
      * Link it into the level object list
      */
-    attach(lvl_obj, obj);
+    attach(&lvl_obj, obj);
     chat(hero.y, hero.x) = (char) obj->o_type;
     flat(hero.y, hero.x) |= F_DROPPED;
     obj->o_pos = hero;

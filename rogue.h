@@ -61,9 +61,6 @@
 #define pack		player.t_pack
 #define proom		player.t_room
 #define max_hp		player.t_stats.s_maxhp
-#define attach(a,b)	_attach(&a,b)
-#define detach(a,b)	_detach(&a,b)
-#define free_list(a)	_free_list(&a)
 #undef max
 #define max(a,b)	((a) > (b) ? (a) : (b))
 #define on(thing,flag)	((bool)(((thing).t_flags & (flag)) != 0))
@@ -506,9 +503,9 @@ extern struct obj_info	arm_info[], pot_info[], ring_info[],
 /*
  * Function types
  */
-void	_attach(THING **list, THING *item);
-void	_detach(THING **list, THING *item);
-void	_free_list(THING **ptr);
+void	attach(THING **list, THING *item);
+void	detach(THING **list, THING *item);
+void	free_list(THING **ptr);
 void	addmsg(char *fmt, ...);
 bool	add_haste(bool potion);
 void	add_pack(THING *obj, bool silent);
@@ -731,7 +728,7 @@ coord	*rndmove(THING *who);
 
 THING	*find_obj(int y, int x);
 THING	*get_item(char *purpose, int type);
-THING	*leave_pack(THING *obj, bool newobj, bool all);
+THING	*leave_pack(THING *obj, bool all);
 THING	*new_item();
 THING	*new_thing();
 

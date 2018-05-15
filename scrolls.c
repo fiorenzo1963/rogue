@@ -27,7 +27,6 @@ read_scroll()
     int y, x;
     char ch;
     int i;
-    bool discardit = FALSE;
     struct room *cur_room;
     THING *fd_obj;
     static coord mp;
@@ -51,9 +50,7 @@ read_scroll()
     /*
      * Get rid of the thing
      */
-    discardit = (bool)(obj->o_count == 1);
-    leave_pack(obj, FALSE, FALSE);
-
+    obj = leave_pack(obj, FALSE);
     switch (obj->o_which)
     {
 	case S_CONFUSE:
@@ -311,8 +308,7 @@ def:
 
     call_it(&scr_info[obj->o_which]);
 
-    if (discardit)
-	discard(obj);
+    discard(obj);
 }
 
 /*

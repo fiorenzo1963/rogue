@@ -146,7 +146,7 @@ populate_rooms()
 	        gold->o_flags = ISMANY;
 	        gold->o_group = GOLDGRP;
 	        gold->o_type = GOLD;
-	        attach(lvl_obj, gold);
+	        attach(&lvl_obj, gold);
             }
 	}
 	/*

@@ -35,13 +35,13 @@ look(bool wakeup)
     int passcount;
     char pfl, *fp, pch;
     int sy, sx, sumhero = 0, diffhero = 0;
-# ifdef DEBUG
+#ifdef DEBUG
     static bool done = FALSE;
 
     if (done)
 	return;
     done = TRUE;
-# endif /* DEBUG */
+#endif /* DEBUG */
     passcount = 0;
     rp = proom;
     if (!ce(oldpos, hero))
@@ -311,7 +311,8 @@ eat()
 	}
 	else
 	    msg("%s, that tasted good", choose_str("oh, wow", "yum"));
-    leave_pack(obj, FALSE, FALSE);
+    obj = leave_pack(obj, FALSE);
+    discard(obj);
 }
 
 /*
