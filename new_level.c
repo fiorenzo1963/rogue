@@ -80,7 +80,7 @@ new_level()
     /*
      * Place hero.
      */
-    find_floor((struct room *) NULL, &hero, NOLIMIT, TRUE, 0x0);
+    find_floor((struct room *) NULL, &hero, NOLIMIT, TRUE, FF_NOTRAP);
 
     /*
      * Now place objects things which we can do without if we run out of space

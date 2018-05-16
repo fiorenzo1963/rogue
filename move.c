@@ -258,9 +258,11 @@ door_open(struct room *rp)
 bool
 is_trap(coord *tc)
 {
-    PLACE *pp = INDEX(tc->y, tc->x);
-    pp->p_ch = TRAP;
-    return ((pp->p_flags & F_TMASK) != 0);
+    char fl = flat(tc->y, tc->x);
+    char ch = winat(tc->y, tc->x);
+    if (!(fl & F_REAL) && ch == FLOOR)
+        return TRUE;
+    return FALSE;
 }
 
 /*
