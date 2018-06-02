@@ -649,6 +649,45 @@ nullstr(THING *ignored)
     return "";
 }
 
+/*
+ * make_known:
+ *	Make object known
+ */
+void
+make_known(THING *obj)
+{
+    struct obj_info *op = NULL;
+    int which;
+    obj->o_flags |= ISKNOW;
+    which = obj->o_which;
+    switch (obj->o_type)
+    {
+        case POTION:
+            op = &pot_info[which];
+	when RING:
+	    op = &ring_info[which];
+	when STICK:
+	    op = &ws_info[which];
+	when SCROLL:
+	    op = &scr_info[which];
+	when WEAPON:
+	    op = &weap_info[which];
+	when ARMOR:
+	    op = &arm_info[which];
+	otherwise:
+	    break;
+    }
+    if (op != NULL)
+    {
+        op->oi_know = TRUE;
+        if (op->oi_guess)
+        {
+            memfree(op->oi_guess);
+            op->oi_guess = NULL;
+        }
+    }
+}
+
 # ifdef	MASTER
 /*
  * pr_list:

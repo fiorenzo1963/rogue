@@ -36,19 +36,22 @@ add_pack(THING *obj, bool silent)
 	from_floor = TRUE;
     }
 
-    /*
-     * Check for and deal with scare monster scrolls
-     */
-    if (obj->o_type == SCROLL && obj->o_which == S_SCARE)
-	if (obj->o_flags & ISFOUND)
-	{
-	    detach(&lvl_obj, obj);
-	    mvaddch(hero.y, hero.x, floor_ch());
-	    chat(hero.y, hero.x) = (proom->r_flags & ISGONE) ? PASSAGE : FLOOR;
-	    discard(obj);
-	    msg("the scroll turns to dust as you pick it up");
-	    return;
-	}
+    if (from_floor)
+    {
+        /*
+         * Check for and deal with scare monster scrolls
+         */
+        if (obj->o_type == SCROLL && obj->o_which == S_SCARE)
+	    if (obj->o_flags & ISFOUND)
+	    {
+	        detach(&lvl_obj, obj);
+	        mvaddch(hero.y, hero.x, floor_ch());
+	        chat(hero.y, hero.x) = (proom->r_flags & ISGONE) ? PASSAGE : FLOOR;
+	        discard(obj);
+	        msg("the scroll turns to dust as you pick it up");
+	        return;
+	    }
+    }
 
     if (pack == NULL)
     {

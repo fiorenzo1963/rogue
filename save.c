@@ -262,6 +262,8 @@ restore(char *file, char **envp)
     clearok(curscr, TRUE);
     srand(md_getpid());
     msg("file name: %s", file);
+    wrefresh(curscr);
+    refresh();
     playit();
     /*NOTREACHED*/
     return(0);

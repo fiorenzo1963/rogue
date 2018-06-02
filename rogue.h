@@ -519,6 +519,7 @@ void	badcheck(char *name, struct obj_info *info, int bound);
 void	bounce(THING *weap, char *mname, bool noend);
 void	call();
 void	call_it(struct obj_info *info);
+void    make_known(THING *obj);
 bool	cansee(int y, int x);
 int	center(char *str);
 void	chg_str(int amt);

@@ -77,10 +77,29 @@ init_player()
     obj->o_count = rnd(15) + 25;
     obj->o_flags |= ISKNOW;
     add_pack(obj, TRUE);
-    /*
-     * Add strength
-     */
-    chg_str(2 + rnd(2));
+    if (rookie_mode) {
+        /*
+         * Now add some random goodies
+         */
+        int i, goodies = rnd(5) + 5;
+        for (i = 0; i < goodies; i++) {
+            /*
+             * Cannot call add_pack if it would cause it to
+             * overflow, else it call portions of uninitialized code.
+             * In any case the max count (10) plus defaults is much
+             * less than MAXPACK.
+             */
+            if (inpack < MAXPACK / 2) {
+                obj = new_thing();
+                make_known(obj);
+                add_pack(obj, TRUE);
+            }
+        }
+        /*
+         * Add strength
+         */
+        chg_str(2 + rnd(2));
+    }
 }
 
 /*

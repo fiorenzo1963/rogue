@@ -103,11 +103,14 @@ main(int argc, char **argv, char **envp)
 
     initscr();				/* Start up cursor package */
     init_probs();			/* Set up prob tables for objects */
-    init_player();			/* Set up initial player stats */
     init_names();			/* Set up names of scrolls */
     init_colors();			/* Set up colors of potions */
     init_stones();			/* Set up stone settings of rings */
     init_materials();			/* Set up materials of wands */
+    /*
+     * Must call this after all of the above.
+     */
+    init_player();			/* Set up initial player stats and objects */
     setup();
 
     /*

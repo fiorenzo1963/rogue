@@ -36,7 +36,7 @@ Build as follows:
   - Other bug fixes.
   - Added Rookie/Warrior mode. The "R" flag will be shown at the end of the status line when in Rookie mode.
     - Warrior mode is the original behavior.
-    - Rookie mode gives you better weapon and armor, and much higher chances of finding a roomfull of monsters. This gives you more chances of acquiring resources.
+    - Rookie mode gives you better weapon and armor, a few goodies, and much higher chances of finding a roomfull of monsters. This gives you more chances of acquiring resources.
 
 - To run in "Warrior" mode: rogue
 - To run in "Rookie" mode: rogue -r
@@ -76,4 +76,3 @@ Well, you have the source code, so might as well summarize here messages.
 ## FIXME
 
 - Fix handling of delta coordinates
-- Still need to fix more object bugs in pack list
