@@ -81,19 +81,13 @@ init_player()
         /*
          * Now add some random goodies
          */
-        int i, goodies = rnd(5) + 5;
+        int i, goodies = rnd(4) + 8;
+        if (goodies >= MAXPACK)
+            goodies = MAXPACK - 5;
         for (i = 0; i < goodies; i++) {
-            /*
-             * Cannot call add_pack if it would cause it to
-             * overflow, else it call portions of uninitialized code.
-             * In any case the max count (10) plus defaults is much
-             * less than MAXPACK.
-             */
-            if (inpack < MAXPACK / 2) {
-                obj = new_thing();
-                make_known(obj);
-                add_pack(obj, TRUE);
-            }
+            obj = new_thing();
+            make_known(obj);
+            add_pack(obj, TRUE);
         }
         /*
          * Add strength

@@ -55,7 +55,7 @@ add_pack(THING *obj, bool silent)
 
     if (pack == NULL)
     {
-        if (!pack_room(from_floor, obj, TRUE))
+        if (!pack_room(from_floor, obj, TRUE, silent))
             return;
 	pack = obj;
 	inpack++;
@@ -81,7 +81,7 @@ add_pack(THING *obj, bool silent)
 		{
 		    if (ISMULT(op->o_type))
 		    {
-			if (!pack_room(from_floor, obj, FALSE))
+			if (!pack_room(from_floor, obj, FALSE, silent))
 			    return;
 			op->o_count++;
 dump_it:
@@ -109,7 +109,7 @@ dump_it:
 			{
 				op->o_count += obj->o_count;
 				inpack--;
-				if (!pack_room(from_floor, obj, FALSE))
+				if (!pack_room(from_floor, obj, FALSE, silent))
 				    return;
 				goto dump_it;
 			}
@@ -124,7 +124,7 @@ out:
 
 	if (lp != NULL)
 	{
-	    if (!pack_room(from_floor, obj, TRUE))
+	    if (!pack_room(from_floor, obj, TRUE, silent))
 		return;
             next(obj) = next(lp);
             prev(obj) = lp;
@@ -166,21 +166,24 @@ out:
  *	appropriate message
  */
 bool
-pack_room(bool from_floor, THING *obj, bool need_pack_char)
+pack_room(bool from_floor, THING *obj, bool need_pack_char, bool silent)
 {
     char ch = 0;
     if (need_pack_char)
         ch = pack_char();
     if (++inpack > MAXPACK || (need_pack_char && ch == 0))
     {
-	if (!terse)
-	    addmsg("there's ");
-	addmsg("no room");
-        if (need_pack_char && ch == 0)
-            addmsg(" for slots");
-	if (!terse)
-	    addmsg(" in your pack");
-	endmsg();
+        if (!silent)
+        {
+            if (!terse)
+                addmsg("there's ");
+            addmsg("no room");
+            if (need_pack_char && ch == 0)
+                addmsg(" for slots");
+            if (!terse)
+                addmsg(" in your pack");
+            endmsg();
+        }
 	if (from_floor)
 	    move_msg(obj);
 	inpack = MAXPACK;
