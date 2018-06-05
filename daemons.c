@@ -163,6 +163,11 @@ stomach()
     {
 	oldfood = food_left;
 	food_left -= ring_eat(LEFT) + ring_eat(RIGHT) + 1 - amulet;
+        if (rookie_mode) {
+            food_left += rnd(1);
+            if (food_left >= STOMACHSIZE)
+                food_left = STOMACHSIZE;
+        }
 
 	if (food_left < MORETIME && oldfood >= MORETIME)
 	{
