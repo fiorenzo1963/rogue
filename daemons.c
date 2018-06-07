@@ -164,9 +164,8 @@ stomach()
 	oldfood = food_left;
 	food_left -= ring_eat(LEFT) + ring_eat(RIGHT) + 1 - amulet;
         if (rookie_mode) {
-            food_left += rnd(1);
-            if (food_left >= STOMACHSIZE)
-                food_left = STOMACHSIZE;
+            /* equivalent of wearing a ring of slow digestion */
+            food_left += rnd(2);
         }
 
 	if (food_left < MORETIME && oldfood >= MORETIME)
@@ -191,6 +190,13 @@ stomach()
         to_death = FALSE; 
         count = 0; 
     } 
+    /*
+     * on old 16 bits machines, there was a chance of
+     * overflow if you were wearing two rings of slow digestion.
+     * this is no longer needed now, but it's nice to have it bounded.
+     */
+    if (food_left >= STOMACHSIZE * 100)
+        food_left = STOMACHSIZE * 100;
 }
 
 /*
