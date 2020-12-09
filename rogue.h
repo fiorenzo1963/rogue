@@ -275,7 +275,7 @@
 #define DART		6
 /*
  * Shiraken is duplicated in 5.4 so to have same number of objects than in 5.3.
- * Shiraken odds is cut in half in both of them to result in the same odds.
+ * Duplicate entry has probability of zero.
  */
 #define CROSSBOW_5_3	7
 #define BOLT_5_3	8

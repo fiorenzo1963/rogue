@@ -406,11 +406,11 @@ struct obj_info weap_info_5_4[MAXWEAPONS + 1] = {
     { "dagger",				 8,   3, NULL, FALSE },
     { "two handed sword",		10,  75, NULL, FALSE },
     { "dart",				12,   2, NULL, FALSE },
-    { "shuriken",			 6,   5, NULL, FALSE },
+    { "shuriken",			12,   5, NULL, FALSE },
     /*
      * The duplicate is not a mistake, see rogue.h.
      */
-    { "shuriken",			 6,   5, NULL, FALSE },
+    { "shuriken",			 0,   5, NULL, FALSE },
     { "spear",				12,   5, NULL, FALSE },
     { NULL, 0, 0, NULL, FALSE },	/* DO NOT REMOVE: fake entry for dragon's breath */
 };
