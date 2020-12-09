@@ -209,7 +209,9 @@
  * Potion types
  */
 #define P_CONFUSE	0
-#define P_LSD		1
+#define P_POT_1		1
+#define P_PARALYZE_5_3	1
+#define P_LSD_5_4	1
 #define P_POISON	2
 #define P_STRENGTH	3
 #define P_SEEINVIS	4
@@ -221,7 +223,9 @@
 #define P_HASTE		10
 #define P_RESTORE	11
 #define P_BLIND		12
-#define P_LEVIT		13
+#define P_POT_13	13
+#define P_NOP_5_3	13
+#define P_LEVIT_5_4	13
 #define MAXPOTIONS	14
 
 /*
@@ -515,10 +519,12 @@ extern struct stats	max_stats;
 extern struct monster *get_monsters();
 #define monsters (get_monsters())
 
-extern struct obj_info	arm_info[], pot_info[], ring_info[],
+extern struct obj_info	arm_info[], ring_info[],
 			scr_info[], things[], ws_info[];
 extern struct obj_info *get_weap_info();
 #define weap_info (get_weap_info())
+extern struct obj_info *get_pot_info();
+#define pot_info (get_pot_info())
 
 /*
  * Function types
@@ -618,6 +624,7 @@ void	kill_daemon(void (*func)());
 bool	lock_sc();
 void	miss(char *er, char *ee, bool noend);
 void	missile(int ydelta, int xdelta);
+void    th_effect(THING *obj, THING *tp);
 void	money(int value);
 int	move_monst(THING *tp);
 void	move_msg(THING *obj);

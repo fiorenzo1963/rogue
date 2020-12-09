@@ -117,8 +117,12 @@ fight(coord *mp, THING *weap, bool thrown)
 	    thunk(weap, mname, terse);
 	else
 	    hit((char *) NULL, mname, terse);
-	if (on(player, CANHUH))
-	{
+        if (ISVERSION_5_3()) {
+	    /* 5.3 version only */
+	    if (weap->o_type == POTION && !save_throw(VS_MAGIC, tp))
+	        th_effect(weap, tp);
+	}
+	if (on(player, CANHUH)) {
 	    did_hit = TRUE;
 	    tp->t_flags |= ISHUH;
 	    player.t_flags &= ~CANHUH;
@@ -803,28 +807,24 @@ killed(THING *tp, bool pr)
     pstats.s_exp += tp->t_stats.s_exp;
 
     /*
-     * If the monster was a venus flytrap, un-hold him
+     * If the monster was a venus flytrap (5.4) / violet fungi (5.3), un-hold him
      */
-    switch (tp->t_type)
-    {
-	case 'F':
-	    player.t_flags &= ~ISHELD;
-	    vf_hit = 0;
-	    strcpy(monsters['F'-'A'].m_stats.s_dmg, "000x0");
-	when 'L':
-	{
-	    THING *gold;
+    if (tp->t_type == 'F') {
+	player.t_flags &= ~ISHELD;
+	vf_hit = 0;
+	strcpy(monsters['F'-'A'].m_stats.s_dmg, "000x0");
+    }
+    if (tp->t_type == 'L') {
+	THING *gold;
 
-	    if (fallpos(&tp->t_pos, &tp->t_room->r_gold) && level >= max_level)
-	    {
-		gold = new_item();
-		gold->o_type = GOLD;
-		gold->o_goldval = GOLDCALC;
-		if (save(VS_MAGIC))
-		    gold->o_goldval += GOLDCALC + GOLDCALC
-				     + GOLDCALC + GOLDCALC;
-		attach(&tp->t_pack, gold);
-	    }
+	if (fallpos(&tp->t_pos, &tp->t_room->r_gold) && level >= max_level) {
+	    gold = new_item();
+	    gold->o_type = GOLD;
+	    gold->o_goldval = GOLDCALC;
+	    if (save(VS_MAGIC))
+		gold->o_goldval += GOLDCALC + GOLDCALC
+				+ GOLDCALC + GOLDCALC;
+	    attach(&tp->t_pack, gold);
 	}
     }
     /*

@@ -281,9 +281,10 @@ struct obj_info arm_info[MAXARMORS] = {
     { "banded mail",		 10,	 90, NULL, FALSE },
     { "plate mail",		  5,	150, NULL, FALSE },
 };
-struct obj_info pot_info[MAXPOTIONS] = {
+
+struct obj_info pot_info_5_3[MAXPOTIONS] = {
     { "confusion",		 7,   5, NULL, FALSE },
-    { "hallucination",		 8,   5, NULL, FALSE },
+    { "paralysis",		 8,   5, NULL, FALSE }, /* 5.3/5.4 */
     { "poison",			 8,   5, NULL, FALSE },
     { "gain strength",		13, 150, NULL, FALSE },
     { "see invisible",		 3, 100, NULL, FALSE },
@@ -295,8 +296,29 @@ struct obj_info pot_info[MAXPOTIONS] = {
     { "haste self",		 5, 190, NULL, FALSE },
     { "restore strength",	13, 130, NULL, FALSE },
     { "blindness",		 5,   5, NULL, FALSE },
-    { "levitation",		 6,  75, NULL, FALSE },
+    { "thirst quencing",	 6,  75, NULL, FALSE }, /* 5.3/5.4 */
 };
+struct obj_info pot_info_5_4[MAXPOTIONS] = {
+    { "confusion",		 7,   5, NULL, FALSE },
+    { "hallucination",		 8,   5, NULL, FALSE }, /* 5.3/5.4 */
+    { "poison",			 8,   5, NULL, FALSE },
+    { "gain strength",		13, 150, NULL, FALSE },
+    { "see invisible",		 3, 100, NULL, FALSE },
+    { "healing",		13, 130, NULL, FALSE },
+    { "monster detection",	 6, 130, NULL, FALSE },
+    { "magic detection",	 6, 105, NULL, FALSE },
+    { "raise level",		 2, 250, NULL, FALSE },
+    { "extra healing",		 5, 200, NULL, FALSE },
+    { "haste self",		 5, 190, NULL, FALSE },
+    { "restore strength",	13, 130, NULL, FALSE },
+    { "blindness",		 5,   5, NULL, FALSE },
+    { "levitation",		 6,  75, NULL, FALSE }, /* 5.3/5.4 */
+};
+struct obj_info *get_pot_info()
+{
+    return ISVERSION_5_3() ? pot_info_5_3 : pot_info_5_4;
+}
+
 struct obj_info ring_info[MAXRINGS] = {
     { "protection",		 9, 400, NULL, FALSE },
     { "add strength",		 9, 400, NULL, FALSE },
@@ -313,6 +335,7 @@ struct obj_info ring_info[MAXRINGS] = {
     { "stealth",		 7, 470, NULL, FALSE },
     { "maintain armor",		 5, 380, NULL, FALSE },
 };
+
 struct obj_info scr_info[MAXSCROLLS] = {
     { "monster confusion",		 7, 140, NULL, FALSE },
     { "magic mapping",			 4, 150, NULL, FALSE },

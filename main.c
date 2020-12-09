@@ -27,7 +27,7 @@ main(int argc, char **argv, char **envp)
 
     md_init();
 
-    printf("monsters/weapons: DONE, armor: N/A, potions/ring_wand/scrolls: TODO\n");
+    printf("monsters/weapons/potions: DONE, armor: N/A, ring_wand/scrolls: TODO\n");
 
 #ifdef MASTER
     /*
@@ -146,7 +146,7 @@ main(int argc, char **argv, char **envp)
     if (LINES < NUMLINES || COLS < NUMCOLS)
     {
 	endwin();
-	printf("\nsorry, the screen is %dx%d, must be at least %dx%d\n", LINES, NUMLINES, COLS, NUMCOLS);
+	printf("\nsorry, the screen is %dx%d, must be at least %dx%d\n", LINES, COLS, NUMLINES, COLS, NUMCOLS);
         fflush(stdout);
 	my_exit(1);
     }
@@ -157,7 +157,7 @@ main(int argc, char **argv, char **envp)
     if (LINES > (NUMLINES+2) || COLS > (NUMCOLS+2))
     {
 	endwin();
-	printf("\nSorry, the screen must no larger than %dx%d\n", NUMLINES+2, NUMCOLS+2);
+	printf("\nsorry, the screen is %dx%d, must be no larger than %dx%d\n", LINES, COLS, NUMLINES+2, NUMCOLS+2);
         fflush(stdout);
 	my_exit(1);
     }

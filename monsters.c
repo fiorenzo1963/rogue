@@ -184,15 +184,13 @@ wake_monster(int y, int x)
      * Every time he sees mean monster, it might start chasing him
      */
     if (!on(*tp, ISRUN) && rnd(3) != 0 && on(*tp, ISMEAN) && !on(*tp, ISHELD)
-	&& !ISWEARING(R_STEALTH) && !on(player, ISLEVIT))
-    {
+	&& !ISWEARING(R_STEALTH) && !on(player, ISLEVIT)) {
 	tp->t_dest = &hero;
 	tp->t_flags |= ISRUN;
     }
     ch_mon = ISVERSION_5_3() ? 'U' : 'M';
     if (ch == ch_mon && !on(player, ISBLIND) && !on(player, ISHALU)
-	&& !on(*tp, ISFOUND) && !on(*tp, ISCANC) && on(*tp, ISRUN))
-    {
+	&& !on(*tp, ISFOUND) && !on(*tp, ISCANC) && on(*tp, ISRUN)) {
         rp = proom;
 	if ((rp != NULL && !(rp->r_flags & ISDARK))
 	    || dist(y, x, hero.y, hero.x) < LAMPDIST)
@@ -216,8 +214,7 @@ wake_monster(int y, int x)
     /*
      * Let greedy ones guard gold
      */
-    if (on(*tp, ISGREED) && !on(*tp, ISRUN))
-    {
+    if (on(*tp, ISGREED) && !on(*tp, ISRUN)) {
 	tp->t_flags |= ISRUN;
 	if (proom->r_goldval)
 	    tp->t_dest = &proom->r_gold;

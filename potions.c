@@ -27,6 +27,9 @@ static PACT p_actions[] =
 	{ ISHUH,	unconfuse,	HUHDURATION,	/* P_CONFUSE */
 		"what a tripy feeling!",
 		"wait, what's going on here. Huh? What? Who?" },
+	/*
+	 * This PACT is only used by version 5.4 (P_LSD - hallucination).
+	 */
 	{ ISHALU,	come_down,	SEEDURATION,	/* P_LSD */
 		"Oh, wow!  Everything seems so cosmic!",
 		"Oh, wow!  Everything seems so cosmic!" },
@@ -45,6 +48,9 @@ static PACT p_actions[] =
 	{ ISBLIND,	sight,	SEEDURATION,		/* P_BLIND */
 		"oh, bummer!  Everything is dark!  Help!",
 		"a cloak of darkness falls around you" },
+	/*
+	 * This PACT is only used by version 5.4 (P_LEVIT - levitation).
+	 */
 	{ ISLEVIT,	land,	HEALTIME,		/* P_LEVIT */
 		"oh, wow!  You're floating in the air!",
 		"you start to float in the air" }
@@ -152,15 +158,24 @@ quaff()
 	    else
 		msg("you have a %s feeling for a moment, then it passes",
 		    choose_str("normal", "strange"));
-	when P_LSD:
-	    if (!trip)
-	    {
-		if (on(player, SEEMONST))
-		    turn_see(FALSE);
-		start_daemon(visuals, 0, BEFORE);
-		seenstairs = seen_stairs();
+	when P_POT_1:
+	/* version 5.3: P_PARALYZE_5_3 */
+	/* version 5.4: P_LSD_5_4 */
+            if (ISVERSION_5_3()) {
+	        /* version 5.3: P_PARALYZE_5_3 */
+		player.t_flags &= ~ISRUN;
+	        no_command += HOLDTIME;
+		msg("you can't move");
+	    } else {
+	       /* version 5.4: P_LSD_5_4 */
+	       if (!trip) {
+		   if (on(player, SEEMONST))
+		       turn_see(FALSE);
+		   start_daemon(visuals, 0, BEFORE);
+		   seenstairs = seen_stairs();
+	       }
+	       do_pot(P_LSD_5_4, TRUE);
 	    }
-	    do_pot(P_LSD, TRUE);
 	when P_SEEINVIS:
 	    sprintf(prbuf, "this potion tastes like %s juice", fruit);
 	    show = on(player, CANSEE);
@@ -202,8 +217,16 @@ quaff()
 	    msg("hey, this tastes great.  It make you feel warm all over");
 	when P_BLIND:
 	    do_pot(P_BLIND, TRUE);
-	when P_LEVIT:
-	    do_pot(P_LEVIT, TRUE);
+        when P_POT_13:
+	/* version 5.3: P_NOP_5_3 */
+	/* version 5.4: P_LEVIT_5_4 */
+            if (ISVERSION_5_3()) {
+		/* version 5.3: P_NOP_5_3 */
+		msg("this potional tastes extremely dull");
+	    } else {
+		/* version 5.4: P_LEVIT_5_4 */
+	        do_pot(P_LEVIT_5_4, TRUE);
+	    }
 	otherwise:
 	    fatal("what an odd tasting potion #%d!", obj->o_which);
 	    return;
@@ -212,9 +235,7 @@ quaff()
     /*
      * Throw the item away
      */
-
     call_it(&pot_info[obj->o_which]);
-
     discard(obj);
 }
 
@@ -366,4 +387,34 @@ do_pot(int type, bool knowit)
     else
 	lengthen(pp->pa_daemon, t);
     msg(choose_str(pp->pa_high, pp->pa_straight));
+}
+
+/*
+ * th_effect:
+ *	Compute the effect of this potion hitting a monster.
+ *	Only called in case of 5.3 version.
+ */
+void
+th_effect(THING *obj, THING *tp)
+{
+    switch (obj->o_which)
+    {
+	when P_CONFUSE:
+	case P_BLIND:
+	    tp->t_flags |= ISHUH;
+	    msg("the %s appears confused", monsters[tp->t_type-'A'].m_name);
+	when P_PARALYZE_5_3:
+	    tp->t_flags &= ~ISRUN;
+	    tp->t_flags |= ISHELD;
+	when P_HEALING:
+	case P_XHEAL:
+	    if ((tp->t_stats.s_hpt += rnd(8)) > tp->t_stats.s_maxhp)
+		tp->t_stats.s_hpt = ++tp->t_stats.s_maxhp;
+	when P_RAISE:
+		tp->t_stats.s_hpt += 8;
+		tp->t_stats.s_maxhp += 8;
+		tp->t_stats.s_lvl++;
+	when P_HASTE:
+		tp->t_flags |= ISHASTE;
+    }
 }

@@ -323,10 +323,10 @@ chase(THING *tp, coord *ee)
 
     /*
      * If the thing is confused, let it move randomly. Invisible
-     * Stalkers are slightly confused all of the time, and bats are
-     * quite confused all the time
+     * Stalkers / Ice Monsters are slightly confused all of the time,
+     * and bats are quite confused all the time
      */
-    if ((on(*tp, ISHUH) && rnd(5) != 0) || (tp->t_type == 'P' && rnd(5) == 0)
+    if ((on(*tp, ISHUH) && rnd(5) != 0) || (tp->t_type == 'I' && rnd(5) == 0)
 	|| (tp->t_type == 'B' && rnd(2) == 0))
     {
 	/*
