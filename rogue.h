@@ -202,9 +202,11 @@
 #define T_BEAR	03
 #define T_TELEP	04
 #define T_DART	05
-#define T_RUST	06
-#define T_MYST  07
-#define NTRAPS	8
+#define T_RUST  06 /* 5.4 only */
+#define T_MYST  07 /* 5.4 only */
+#define NTRAPS_5_3	6 /* NTRAPS version 5.3 */
+#define NTRAPS_5_4	8 /* NTRAPS version 5.4 */
+#define NTRAPS (ISVERSION_5_3()	? NTRAPS_5_3 : NTRAPS_5_4)
 
 /*
  * Potion types
