@@ -1356,6 +1356,7 @@ rs_write_object(FILE *savef, THING *o)
     rs_write_int(savef, o->_o._o_flags);
     rs_write_int(savef, o->_o._o_group);
     rs_write_string(savef, o->_o._o_label);
+    rs_write_int(savef, o->_o._o_enemy);
     return(WRITESTAT);
 }
 
@@ -1380,6 +1381,7 @@ rs_read_object(FILE *inf, THING *o)
     rs_read_int(inf, &o->_o._o_flags);
     rs_read_int(inf, &o->_o._o_group);
     rs_read_new_string(inf, &o->_o._o_label);
+    rs_read_int(inf, &o->_o._o_enemy);
     
     return(READSTAT);
 }
@@ -1645,7 +1647,6 @@ rs_read_thing(FILE *inf, THING *t)
             
     rs_read_int(inf, &listid);
     rs_read_int(inf, &index);
-    t->_t._t_reserved = -1;
 
     if (listid == 0) /* hero or NULL */
     {

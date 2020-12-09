@@ -410,8 +410,7 @@ union thing {
 	struct stats _t_stats;		/* Physical description */
 	struct room *_t_room;		/* Current room for thing */
 	union thing *_t_pack;		/* What the thing is carrying */
-	int _t_reserved1;
-	int _t_reserved2;
+	int _t_reserved;
     } _t;
     struct {
 	union thing *_l_next, *_l_prev;	/* Next pointer in link */
@@ -448,6 +447,7 @@ typedef union thing THING;
 #define t_stats		_t._t_stats
 #define t_pack		_t._t_pack
 #define t_room		_t._t_room
+#define t_reserved      _t._t_reserved
 #define o_type		_o._o_type
 #define o_pos		_o._o_pos
 #define o_text		_o._o_text
