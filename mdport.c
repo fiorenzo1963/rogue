@@ -272,7 +272,11 @@ md_hasclreol()
 #elif defined(__PDCURSES__)
     return(TRUE);
 #else
+#ifdef CE
     return((CE != NULL) && (*CE != 0));
+#else
+    return(1); /* all modern curses have it */
+#endif
 #endif
 }
 

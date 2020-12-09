@@ -55,7 +55,7 @@ bool rookie_mode = FALSE;               /*
                                          * full of monsers to gain pts and
                                          * collect objets quickly.
                                          */
-
+char rogue_version = VERSION_5_3;	/* '4' = 5.4.5 version, '3' = 5.3 version */
 char dir_ch;				/* Direction from last get_dir() call */
 char file_name[MAXSTR];			/* Save file name */
 char huh[MAXSTR];			/* The last message printed */
@@ -192,8 +192,38 @@ struct room passages[MAXPASS] =		/* One for each passage */
 
 #define ___ 1
 #define XX 10
-struct monster monsters[26] =
-    {
+struct monster monsters_5_3[26] = {
+/* Name		 CARRY	FLAG    str, exp, lvl, amr, hpt, dmg */
+{ "giant ant",	 0,	ISMEAN,	{ XX,  9,   2,   3, ___, "1d6" } },
+{ "bat",	 0,	0,	{ XX,  1,   1,   3, ___, "1d2" } },
+{ "centaur",	 15,	0,	{ XX, 15,   4,   4, ___, "1d6/1d6" } },
+{ "dragon",	 100,	ISMEAN,	{ XX,6800, 10,  -1, ___, "1d8/1d8/3d10" } },
+{ "floating eye",0,	0,	{ XX,  5,   1,   9, ___, "0d0" } },
+	/* NOTE: the damage is %%% so that xstr won't merge this */
+	/* string with others, since it is written on in the program */
+{ "violet fungi",0,	ISMEAN,	{ XX, 80,   8,   3, ___, "%%%d0" } },
+{ "gnome",	 10,	0,	{ XX,  7,   1,   5, ___, "1d6" } },
+{ "hobgoblin",	 0,	ISMEAN,	{ XX,  3,   1,   5, ___, "1d8" } },
+{ "invisible stalker",0,ISINVIS,{ XX,120,   8,   3, ___, "4d4" } },
+{ "jackal",	 0,	ISMEAN,	{ XX,  2,   1,   7, ___, "1d2" } },
+{ "kobold",	 0,	ISMEAN,	{ XX,  1,   1,   7, ___, "1d4" } },
+{ "leprechaun",	 0,	0,	{ XX, 10,   3,   8, ___, "1d1" } },
+{ "mimic",	 30,	0,	{ XX,100,   7,   7, ___, "3d4" } },
+{ "nymph",	 100,	0,	{ XX, 37,   3,   9, ___, "0d0" } },
+{ "orc",	 15,	ISGREED,{ XX,  5,   1,   6, ___, "1d8" } },
+{ "purple worm", 70,	0,	{ XX,4000, 15,   6, ___, "2d12/2d4" } },
+{ "quasit",	 30,	ISMEAN,	{ XX, 32,   3,   2, ___, "1d2/1d2/1d4" } },
+{ "rust monster",0,	ISMEAN,	{ XX, 20,   5,   2, ___, "0d0/0d0" } },
+{ "snake",	 0,	ISMEAN,	{ XX,  2,   1,   5, ___, "1d3" } },
+{ "troll",	 50,	ISREGEN|ISMEAN,{ XX, 120, 6, 4, ___, "1d8/1d8/2d6" } },
+{ "umber hulk",	 40,	ISMEAN,	{ XX,200,   8,   2, ___, "3d4/3d4/2d5" } },
+{ "vampire",	 20,	ISREGEN|ISMEAN,{ XX,350,   8,   1, ___, "1d10" } },
+{ "wraith",	 0,	0,	{ XX, 55,   5,   4, ___, "1d6" } },
+{ "xorn",	 0,	ISMEAN,	{ XX,190,   7,  -2, ___, "1d3/1d3/1d3/4d6" } },
+{ "yeti",	 30,	0,	{ XX, 50,   4,   6, ___, "1d6/1d6" } },
+{ "zombie",	 0,	ISMEAN,	{ XX,  6,   2,   8, ___, "1d8" } }
+};
+struct monster monsters_5_4_5[26] = {
 /* Name		 CARRY	FLAG    str, exp, lvl, amr, hpt, dmg */
 { "aquator",	   0,	ISMEAN,	{ XX, 20,   5,   2, ___, "0x0/0x0" } },
 { "bat",	   0,	ISFLY,	{ XX,  1,   1,   3, ___, "1x2" } },
@@ -223,9 +253,13 @@ struct monster monsters[26] =
 { "xeroc",	  30,	0,	{ XX,100,   7,   7, ___, "4x4" } },
 { "yeti",	  30,	0,	{ XX, 50,   4,   6, ___, "1x6/1x6" } },
 { "zombie",	   0,	ISMEAN,	{ XX,  6,   2,   8, ___, "1x8" } }
-    };
+};
 #undef ___
 #undef XX
+struct monster *get_monsters()
+{
+    return ISVERSION_5_3() ? monsters_5_3 : monsters_5_4_5;
+}
 
 struct obj_info things[NUMTHINGS] = {
     { 0,			26 },	/* potion */
@@ -299,7 +333,21 @@ struct obj_info scr_info[MAXSCROLLS] = {
     { "aggravate monsters",		 3,  20, NULL, FALSE },
     { "protect armor",			 2, 250, NULL, FALSE },
 };
-struct obj_info weap_info[MAXWEAPONS + 1] = {
+
+struct obj_info weap_info_5_3[MAXWEAPONS + 1] = {
+    { "mace",				10,   8, NULL, FALSE },
+    { "long sword",			10,  15, NULL, FALSE },
+    { "short bow",			10,  15, NULL, FALSE },
+    { "arrow",				10,   1, NULL, FALSE },
+    { "dagger",				10,   3, NULL, FALSE },
+    { "two handed sword",		10,  75, NULL, FALSE },
+    { "dart",				10,   2, NULL, FALSE },
+    { "crossbow",			10,   5, NULL, FALSE },
+    { "crossbow bolt",			10,   5, NULL, FALSE },
+    { "spear",				10,   5, NULL, FALSE },
+    { NULL, 0, 0, NULL, FALSE },	/* DO NOT REMOVE: fake entry for dragon's breath */
+};
+struct obj_info weap_info_5_4[MAXWEAPONS + 1] = {
     { "mace",				11,   8, NULL, FALSE },
     { "long sword",			11,  15, NULL, FALSE },
     { "short bow",			12,  15, NULL, FALSE },
@@ -307,10 +355,19 @@ struct obj_info weap_info[MAXWEAPONS + 1] = {
     { "dagger",				 8,   3, NULL, FALSE },
     { "two handed sword",		10,  75, NULL, FALSE },
     { "dart",				12,   2, NULL, FALSE },
-    { "shuriken",			12,   5, NULL, FALSE },
+    { "shuriken",			 6,   5, NULL, FALSE },
+    /*
+     * The duplicate is not a mistake, see rogue.h.
+     */
+    { "shuriken",			 6,   5, NULL, FALSE },
     { "spear",				12,   5, NULL, FALSE },
-    { NULL, 0 },	/* DO NOT REMOVE: fake entry for dragon's breath */
+    { NULL, 0, 0, NULL, FALSE },	/* DO NOT REMOVE: fake entry for dragon's breath */
 };
+struct obj_info *get_weap_info()
+{
+    return ISVERSION_5_3() ? weap_info_5_3 : weap_info_5_4;
+}
+
 struct obj_info ws_info[MAXSTICKS] = {
     { "light",			12, 250, NULL, FALSE },
     { "invisibility",		 6,   5, NULL, FALSE },

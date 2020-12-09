@@ -32,7 +32,11 @@ static struct init_weaps {
     { "1x6",	"1x4",	NO_WEAPON,	ISMISL|ISMISL,	},	/* Dagger */
     { "4x4",	"1x2",	NO_WEAPON,	0,		},	/* 2h sword */
     { "1x1",	"1x3",	NO_WEAPON,	ISMANY|ISMISL,	},	/* Dart */
-    { "1x2",	"2x4",	NO_WEAPON,	ISMANY|ISMISL,	},	/* Shuriken */
+    /*
+     * See rogue.h
+     */
+    { "1x2",	"2x4",	NO_WEAPON,	ISMANY|ISMISL,	},	/* Shuriken (5.4) Crossbow (5.3) */
+    { "1x2",	"2x5",	NO_WEAPON,	ISMANY|ISMISL,	},	/* Shuriken (5.4) Crossbow Bolt (5.3) */
     { "2x3",	"1x6",	NO_WEAPON,	ISMISL,		},	/* Spear */
 };
 

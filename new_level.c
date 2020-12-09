@@ -215,7 +215,7 @@ put_things()
 	        /*
 	         * Pick a new object and link it in the list
 	         */
-                THING *obj = new_thing();
+                THING *obj = new_thing(FALSE);
                 obj->o_pos = mp;
 	        attach(&lvl_obj, obj);
 	        /*
@@ -249,7 +249,7 @@ treas_room()
     while (nm--)
     {
 	if (find_floor(rp, &mp, 2 * MAXTRIES_TREAS, FALSE, 0x0)) {
-	    tp = new_thing();
+	    tp = new_thing(FALSE);
 	    tp->o_pos = mp;
 	    attach(&lvl_obj, tp);
 	    chat(mp.y, mp.x) = (char) tp->o_type;
