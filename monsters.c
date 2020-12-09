@@ -169,6 +169,7 @@ wake_monster(int y, int x)
     THING *tp;
     struct room *rp;
     char ch, *mname;
+    char ch_mon;
 
 #ifdef MASTER
     if ((tp = moat(y, x)) == NULL)
@@ -188,7 +189,8 @@ wake_monster(int y, int x)
 	tp->t_dest = &hero;
 	tp->t_flags |= ISRUN;
     }
-    if (ch == 'M' && !on(player, ISBLIND) && !on(player, ISHALU)
+    ch_mon = ISVERSION_5_3() ? 'U' : 'M';
+    if (ch == ch_mon && !on(player, ISBLIND) && !on(player, ISHALU)
 	&& !on(*tp, ISFOUND) && !on(*tp, ISCANC) && on(*tp, ISRUN))
     {
         rp = proom;
