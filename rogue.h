@@ -319,8 +319,10 @@
  * Rod/Wand/Staff types
  */
 #define WS_LIGHT	0
-#define WS_INVIS	1
-#define WS_ELECT	2
+#define WS_ELECT	1
+#define WS_SLOT_2	2
+#define WS_HIT_5_3	2
+#define WS_INVIS_5_4	2
 #define WS_FIRE		3
 #define WS_COLD		4
 #define WS_POLYMORPH	5
@@ -531,14 +533,18 @@ extern struct stats	max_stats;
 extern struct monster *get_monsters();
 #define monsters (get_monsters())
 
-extern struct obj_info	arm_info[], ring_info[],
-			things[], ws_info[];
+extern struct obj_info	arm_info[];
+extern struct obj_info	things[];
+extern struct obj_info	arm_info[];
 extern struct obj_info *get_weap_info();
 #define weap_info (get_weap_info())
 extern struct obj_info *get_pot_info();
 #define pot_info (get_pot_info())
 extern struct obj_info *get_scr_info();
 #define scr_info (get_scr_info())
+extern struct obj_info *get_ws_info();
+#define ws_info (get_ws_info())
+extern struct obj_info	ring_info[]; /* TODO */
 
 /*
  * Function types
@@ -608,6 +614,7 @@ void	fire_bolt(coord *start, coord *dir, char *name);
 char	floor_at();
 void	flush_type();
 int	fight(coord *mp, THING *weap, bool thrown);
+int	fight_at(coord *mp, THING *weap, bool thrown, coord *delta);
 void	fix_stick(THING *cur);
 void	fuse(void (*func)(), int arg, int time, int type);
 bool	get_dir();

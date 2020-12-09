@@ -419,7 +419,23 @@ struct obj_info *get_weap_info()
     return ISVERSION_5_3() ? weap_info_5_3 : weap_info_5_4;
 }
 
-struct obj_info ws_info[MAXSTICKS] = {
+struct obj_info ws_info_5_3[MAXSTICKS] = {
+    { "light",			12, 250, NULL, FALSE },
+    { "striking",		 6,  75, NULL, FALSE },
+    { "lightning",		 3, 330, NULL, FALSE },
+    { "fire",			 3, 330, NULL, FALSE },
+    { "cold",			 3, 330, NULL, FALSE },
+    { "polymorph",		15, 310, NULL, FALSE },
+    { "magic missile",		10, 170, NULL, FALSE },
+    { "haste monster",		10,   5, NULL, FALSE },
+    { "slow monster",		11, 350, NULL, FALSE },
+    { "drain life",		 9, 300, NULL, FALSE },
+    { "nothing",		 1,   5, NULL, FALSE },
+    { "teleport away",		 6, 340, NULL, FALSE },
+    { "teleport to",		 6,  50, NULL, FALSE },
+    { "cancellation",		 5, 280, NULL, FALSE },
+};
+struct obj_info ws_info_5_4[MAXSTICKS] = {
     { "light",			12, 250, NULL, FALSE },
     { "invisibility",		 6,   5, NULL, FALSE },
     { "lightning",		 3, 330, NULL, FALSE },
@@ -435,6 +451,10 @@ struct obj_info ws_info[MAXSTICKS] = {
     { "teleport to",		 6,  50, NULL, FALSE },
     { "cancellation",		 5, 280, NULL, FALSE },
 };
+struct obj_info *get_ws_info()
+{
+    return ISVERSION_5_3() ? ws_info_5_3 : ws_info_5_4;
+}
 
 struct h_list helpstr[] = {
     {'?',	"	prints help",				TRUE},

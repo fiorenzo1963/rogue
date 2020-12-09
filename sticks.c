@@ -100,11 +100,34 @@ do_zap()
 	    }
 	    else
 		drain();
-	when WS_INVIS:
-	case WS_POLYMORPH:
+	when WS_SLOT_2:
+	    if (ISVERSION_5_3()) {
+	        delta.y += hero.y;
+	        delta.x += hero.x;
+	        if ((tp = moat(delta.y, delta.x)) != NULL)
+	        {
+		    if (rnd(20) == 0)
+		    {
+		        strncpy(obj->o_damage, "3d8", sizeof ("3d8"));
+		        obj->o_dplus = 9;
+		    }
+		    else
+		    {
+		        strncpy(obj->o_damage, "1d8", sizeof ("1d8"));
+		        obj->o_dplus = 3;
+		    }
+		    fight(&delta, obj, FALSE);
+	        }
+	    } else {
+	        /* WS_INVIS_5_4: */
+		goto ws_invis_5_4_label;
+	    }
+	when WS_POLYMORPH:
 	case WS_TELAWAY:
 	case WS_TELTO:
 	case WS_CANCEL:
+	/* case WS_INVIS_5_4: */
+ws_invis_5_4_label:
 	    y = hero.y;
 	    x = hero.x;
 	    while (step_ok(winat(y, x)))
@@ -118,7 +141,7 @@ do_zap()
 		if (monster == 'F')
 		    player.t_flags &= ~ISHELD;
 		switch (obj->o_which) {
-		    case WS_INVIS:
+		    case WS_INVIS_5_4:
 			tp->t_flags |= ISINVIS;
 			if (cansee(y, x))
 			    mvaddch(y, x, tp->t_oldch);
