@@ -18,15 +18,13 @@
 /*
  * List of monsters in rough order of vorpalness
  */
-static char lvl_mons[] =  {
-    'K', 'E', 'B', 'S', 'H', 'I', 'R', 'O', 'Z', 'L', 'C', 'Q', 'A',
-    'N', 'Y', 'F', 'T', 'W', 'P', 'X', 'U', 'M', 'V', 'G', 'J', 'D'
-};
+static char lvl_mons_5_4[]  = "KEBSHIROZLCQANYFTWPXUMVGJD";
+static char wand_mons_5_4[] = "KEBSH ROZ CQA Y TWP UMVGJ ";
+static char lvl_mons_5_3[]  = "KJBSHEAOZGLCRQNYTWFIXUMVPD";
+static char wand_mons_5_3[] = "KJBSH AOZG CRQ YTW IXU VP ";
 
-static char wand_mons[] = {
-    'K', 'E', 'B', 'S', 'H',   0, 'R', 'O', 'Z',   0, 'C', 'Q', 'A',
-      0, 'Y',   0, 'T', 'W', 'P',   0, 'U', 'M', 'V', 'G', 'J',   0
-};
+#define lvl_mons  (ISVERSION_5_3() ? lvl_mons_5_3 : lvl_mons_5_4)
+#define wand_mons (ISVERSION_5_3() ? wand_mons_5_3 : wand_mons_5_4)
 
 /*
  * randmonster:
@@ -47,7 +45,7 @@ randmonster(bool wander)
 	    d = rnd(5);
 	if (d > 25)
 	    d = rnd(5) + 21;
-    } while (mons[d] == 0);
+    } while (mons[d] == ' ');
     return mons[d];
 }
 
@@ -86,8 +84,25 @@ new_monster(THING *tp, char type, coord *cp)
     tp->t_pack = NULL;
     if (ISWEARING(R_AGGR))
 	runto(cp);
-    if (type == 'X')
-	tp->t_disguise = rnd_thing();
+    if (ISVERSION_5_3()) {
+        if (type == 'M') {
+	    switch (rnd(level > 25 ? 9 : 8))
+	    {
+	        when 0: tp->t_disguise = GOLD;
+	        when 1: tp->t_disguise = POTION;
+	        when 2: tp->t_disguise = SCROLL;
+	        when 3: tp->t_disguise = STAIRS;
+	        when 4: tp->t_disguise = WEAPON;
+	        when 5: tp->t_disguise = ARMOR;
+	        when 6: tp->t_disguise = RING;
+	        when 7: tp->t_disguise = STICK;
+	        when 8: tp->t_disguise = AMULET;
+	    }
+	}
+    } else {
+        if (type == 'X')
+	    tp->t_disguise = rnd_thing();
+    }
 }
 
 /*

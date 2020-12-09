@@ -248,7 +248,7 @@ teleport()
         mvaddch(hero.y, hero.x, PLAYER);
         /*
          * turn off ISHELD in case teleportation was done while fighting
-         * a Flytrap
+         * a Flytrap (5.4.5) / Fungi (5.3).
          */
         if (on(player, ISHELD)) {
 	    player.t_flags &= ~ISHELD;

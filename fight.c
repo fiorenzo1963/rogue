@@ -80,21 +80,32 @@ fight(coord *mp, THING *weap, bool thrown)
     count = 0;
     quiet = 0;
     runto(mp);
-    /*
-     * Let him know it was really a xeroc (if it was one).
-     */
     ch = '\0';
-    if (tp->t_type == 'X' && tp->t_disguise != 'X' && !on(player, ISBLIND))
-    {
-	tp->t_disguise = 'X';
-	if (on(player, ISHALU)) {
-	    ch = (char)(rnd(26) + 'A');
-	    mvaddch(tp->t_pos.y, tp->t_pos.x, ch);
-	}
-	msg(choose_str("heavy!  That's a nasty critter!",
-		       "wait!  That's a xeroc!"));
-	if (!thrown)
-	    return FALSE;
+    if (ISVERSION_5_3()) {
+        /*
+         * Let him know it was really a mimic (if it was one).
+         */
+        if (tp->t_type == 'M' && tp->t_disguise != 'M' && !on(player, ISBLIND)) {
+	    tp->t_disguise = 'M';
+	    if (!thrown)
+	        return FALSE;
+	    msg("wait! That's a mimic!");
+        }
+    } else {
+        /*
+         * Let him know it was really a xeroc (if it was one).
+         */
+    	if (tp->t_type == 'X' && tp->t_disguise != 'X' && !on(player, ISBLIND)) {
+	    tp->t_disguise = 'X';
+	    if (on(player, ISHALU)) {
+	        ch = (char)(rnd(26) + 'A');
+	        mvaddch(tp->t_pos.y, tp->t_pos.x, ch);
+	    }
+	    msg(choose_str("heavy! That's a nasty critter!",
+		           "wait! That's a xeroc!"));
+	    if (!thrown)
+	        return FALSE;
+        }
     }
     mname = set_mname(tp);
     did_hit = FALSE;
@@ -129,59 +140,154 @@ fight(coord *mp, THING *weap, bool thrown)
     return did_hit;
 }
 
-/*
- * attack:
- *	The monster attacks the player
- */
-int
-attack(THING *mp)
+THING *attack_5_3(THING *mp)
 {
-    register char *mname;
-    register int oldhp;
+    register char *mname = set_mname(mp);
+    register int oldhp = pstats.s_hpt;
 
-    /*
-     * Since this is an attack, stop running and any healing that was
-     * going on at the time.
-     */
-    running = FALSE;
-    count = 0;
-    quiet = 0;
-    if (to_death && !on(*mp, ISTARGET))
-    {
-	to_death = FALSE;
-	kamikaze = FALSE;
-    }
-    if (mp->t_type == 'X' && mp->t_disguise != 'X' && !on(player, ISBLIND))
-    {
-	mp->t_disguise = 'X';
-	if (on(player, ISHALU))
-	    mvaddch(mp->t_pos.y, mp->t_pos.x, rnd(26) + 'A');
-    }
-    mname = set_mname(mp);
-    oldhp = pstats.s_hpt;
-    if (roll_em(mp, &player, (THING *) NULL, FALSE))
-    {
-	if (mp->t_type != 'I')
+    if (!on(*mp, ISCANC)) {
+	    switch (mp->t_type)
+	    {
+		when 'R':
+		    /*
+		     * If a rust monster hits, you lose armor, unless
+		     * that armor is leather or there is a magic ring
+		     */
+		    rust_armor(cur_armor);
+		when 'E':
+		    /*
+		     * The gaze of the floating eye hypnotizes you
+		     */
+		    if (on(player, ISBLIND) || save(VS_PARALYZATION))
+			break;
+		    player.t_flags &= ~ISRUN;
+		    if (!no_command)
+		    {
+			addmsg("you are transfixed");
+			if (!terse)
+			    addmsg(" by the gaze of the floating eye");
+			endmsg();
+		    }
+		    no_command += rnd(2) + 2;
+		when 'A':
+		    /*
+		     * Ants have poisonous bites
+		     */
+		    if (!save(VS_POISON))
+			if (!ISWEARING(R_SUSTSTR))
+			{
+			    chg_str(-1);
+			    if (!terse)
+				msg("you feel a sting in your arm and now feel weaker");
+			    else
+				msg("a sting has weakened you");
+			}
+			else
+			    if (!terse)
+				msg("a sting momentarily weakens you");
+			    else
+				msg("sting has no effect");
+		when 'W':
+		case 'V':
+		    /*
+		     * Wraiths might drain energy levels, and Vampires
+		     * can steal max_hp
+		     */
+		    if (rnd(100) < (mp->t_type == 'W' ? 15 : 30))
+		    {
+			register int fewer;
+
+			if (mp->t_type == 'W')
+			{
+			    if (pstats.s_exp == 0)
+				death('W');		/* All levels gone */
+			    if (--pstats.s_lvl == 0)
+			    {
+				pstats.s_exp = 0;
+				pstats.s_lvl = 1;
+			    }
+			    else
+				pstats.s_exp = e_levels[pstats.s_lvl-1]+1;
+			    fewer = roll(1, 10);
+			}
+			else
+			    fewer = roll(1, 5);
+			pstats.s_hpt -= fewer;
+			max_hp -= fewer;
+			if (pstats.s_hpt < 1)
+			    pstats.s_hpt = 1;
+			if (max_hp < 1)
+			    death(mp->t_type);
+			msg("you suddenly feel weaker");
+		    }
+		when 'F':
+		    /*
+		     * Violet fungi stops the poor guy from moving
+		     */
+		    player.t_flags |= ISHELD;
+		    sprintf(mp->t_stats.s_dmg,"%dd1",++vf_hit);
+		when 'L':
+		{
+		    /*
+		     * Leprechaun steals some gold
+		     */
+		    register int lastpurse;
+
+		    lastpurse = purse;
+		    purse -= GOLDCALC;
+		    if (!save(VS_MAGIC))
+			purse -= GOLDCALC + GOLDCALC + GOLDCALC + GOLDCALC;
+		    if (purse < 0)
+			purse = 0;
+		    remove_mon(&mp->t_pos, mp, FALSE);
+                    mp=NULL;
+		    if (purse != lastpurse)
+			msg("your purse feels lighter");
+		}
+		when 'N':
+		{
+		    register THING *obj, *steal;
+                    int nobj;
+
+		    /*
+		     * Nymph's steal a magic item, look through the pack
+		     * and pick out one we like.
+		     */
+		    steal = NULL;
+		    for (nobj = 0, obj = pack; obj != NULL; obj = next(obj))
+			if (obj != cur_armor && obj != cur_weapon
+			    && obj != cur_ring[LEFT] && obj != cur_ring[RIGHT]
+			    && is_magic(obj) && rnd(++nobj) == 0)
+				steal = obj;
+		    if (steal != NULL)
+		    {
+                        remove_mon(&mp->t_pos, moat(mp->t_pos.y, mp->t_pos.x), FALSE);
+                        mp = NULL;
+                        steal = leave_pack(steal, FALSE);
+                        msg("she stole %s!", inv_name(steal, TRUE));
+                        discard(steal);
+		    }
+		}
+		otherwise:
+		    break;
+	    }
+    } else if (mp->t_type != 'E') {
+	if (mp->t_type == 'F')
 	{
-	    if (has_hit)
-		addmsg(".  ");
-	    hit(mname, (char *) NULL, FALSE);
+	    pstats.s_hpt -= vf_hit;
+	    if (pstats.s_hpt <= 0)
+		death(mp->t_type);	/* Bye bye life ... */
 	}
-	else
-	    if (has_hit)
-		endmsg();
-	has_hit = FALSE;
-	if (pstats.s_hpt <= 0)
-	    death(mp->t_type);	/* Bye bye life ... */
-	else if (!kamikaze)
-	{
-	    oldhp -= pstats.s_hpt;
-	    if (oldhp > max_hit)
-		max_hit = oldhp;
-	    if (pstats.s_hpt <= max_hit)
-		to_death = FALSE;
-	}
-	if (!on(*mp, ISCANC))
+	miss(mname, (char *) NULL, FALSE);
+    }
+    return mp;
+}
+
+THING *attack_5_4(THING *mp)
+{
+    register char *mname = set_mname(mp);
+    register int oldhp = pstats.s_hpt;
+    if (!on(*mp, ISCANC)) {
 	    switch (mp->t_type)
 	    {
 		case 'A':
@@ -312,9 +418,7 @@ attack(THING *mp)
 		otherwise:
 		    break;
 	    }
-    }
-    else if (mp->t_type != 'I')
-    {
+    } else if (mp->t_type != 'I') {
 	if (has_hit)
 	{
 	    addmsg(".  ");
@@ -328,6 +432,75 @@ attack(THING *mp)
 	}
 	miss(mname, (char *) NULL, FALSE);
     }
+    return mp;
+}
+
+/*
+ * attack:
+ *	The monster attacks the player
+ */
+int
+attack(THING *mp)
+{
+    register char *mname;
+    register int oldhp;
+
+    /*
+     * Since this is an attack, stop running and any healing that was
+     * going on at the time.
+     */
+    running = FALSE;
+    count = 0;
+    quiet = 0;
+    if (to_death && !on(*mp, ISTARGET))
+    {
+	to_death = FALSE;
+	kamikaze = FALSE;
+    }
+    if (ISVERSION_5_3()) {
+        if (mp->t_type == 'M' && mp->t_disguise != 'M' && !on(player, ISBLIND))
+	    mp->t_disguise = 'M';
+    } else {
+        if (mp->t_type == 'X' && mp->t_disguise != 'X' && !on(player, ISBLIND)) {
+	    mp->t_disguise = 'X';
+	    if (on(player, ISHALU))
+	        mvaddch(mp->t_pos.y, mp->t_pos.x, rnd(26) + 'A');
+        }
+    }
+    mname = set_mname(mp);
+    oldhp = pstats.s_hpt;
+
+    if (roll_em(mp, &player, (THING *) NULL, FALSE)) {
+        if (ISVERSION_5_3() && mp->t_type != 'E') {
+	    if (has_hit)
+		addmsg(".  ");
+	    hit(mname, (char *) NULL, FALSE);
+	} else if (ISVERSION_5_4() && mp->t_type != 'I') {
+	    if (has_hit)
+		addmsg(".  ");
+	    hit(mname, (char *) NULL, FALSE);
+	} else {
+	    if (has_hit)
+		endmsg();
+	}
+	has_hit = FALSE;
+	if (pstats.s_hpt <= 0)
+	    death(mp->t_type);	/* Bye bye life ... */
+	else if (!kamikaze)
+	{
+	    oldhp -= pstats.s_hpt;
+	    if (oldhp > max_hit)
+		max_hit = oldhp;
+	    if (pstats.s_hpt <= max_hit)
+		to_death = FALSE;
+	}
+
+        if (ISVERSION_5_3())
+            mp = attack_5_3(mp);
+	else
+            mp = attack_5_4(mp);
+    }
+
     if (fight_flush && !to_death)
 	flush_type();
     count = 0;

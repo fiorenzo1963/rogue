@@ -13,7 +13,9 @@
 #include <stdio.h>
 #include <string.h>
 
-main()
+extern char *xcrypt(const char *, const char *);
+
+int main()
 {
     char buf[80];
 
@@ -21,4 +23,5 @@ main()
     fgets(buf, 80, stdin);
     buf[strlen(buf) - 1] = '\0';
     printf("\"%s\"\n", xcrypt(buf, "mT"));
+    return 0;
 }

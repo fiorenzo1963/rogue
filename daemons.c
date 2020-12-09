@@ -96,8 +96,10 @@ unsee()
 {
     register THING *th;
 
+#ifdef MASTER
     if (wizard)
         return;
+#endif
     for (th = mlist; th != NULL; th = next(th))
 	if (on(*th, ISINVIS) && see_monst(th))
 	    mvaddch(th->t_pos.y, th->t_pos.x, th->t_oldch);

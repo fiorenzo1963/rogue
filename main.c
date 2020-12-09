@@ -42,10 +42,35 @@ main(int argc, char **argv, char **envp)
 
 #endif
 
-    if (argc >= 2 && strcmp(argv[1], "-r") == 0) {
-        rookie_mode = TRUE;
-        argc--;
-        argv++;
+    /*
+     * FIXME: do better arg processing
+     */
+    while (argc >= 2) {
+	if (strcmp(argv[1], "-r") == 0) {
+            rookie_mode = TRUE;
+            argc--;
+            argv++;
+	    continue;
+	}
+        if (strcmp(argv[1], "-5.3") == 0) {
+            rogue_version = VERSION_5_3;
+            argc--;
+            argv++;
+	    continue;
+        }
+        if (strcmp(argv[1], "-5.4") == 0) {
+            rogue_version = VERSION_5_4;
+            argc--;
+            argv++;
+	    continue;
+	}
+	if (strncmp(argv[1], "-", 1) == 0) {
+            printf("rogue: WARNING: ignoring unknown option %s\n", argv[1]);
+            argc--;
+            argv++;
+	    continue;
+	}
+	break;
     }
 
     /*

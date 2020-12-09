@@ -225,20 +225,22 @@ status()
     if (stat_msg)
     {
 	move(0, 0);
-        msg("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%ld  %c  %s",
+        msg("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%ld %c%c %s",
 	    level, purse, hpwidth, pstats.s_hpt, hpwidth, max_hp, pstats.s_str,
 	    max_stats.s_str, 10 - s_arm, pstats.s_lvl, pstats.s_exp,
-            (rookie_mode ? 'R' : ' '),
+            (rookie_mode ? 'r' : 'w'),
+	    rogue_version,
 	    state_name[hungry_state]);
     }
     else
     {
 	move(STATLINE, 0);
                 
-        printw("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%d  %c  %s",
+        printw("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%d %c%c %s",
 	    level, purse, hpwidth, pstats.s_hpt, hpwidth, max_hp, pstats.s_str,
 	    max_stats.s_str, 10 - s_arm, pstats.s_lvl, pstats.s_exp,
-            (rookie_mode ? 'R' : ' '),
+            (rookie_mode ? 'r' : 'w'),
+	    rogue_version,
 	    state_name[hungry_state]);
     }
 

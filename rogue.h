@@ -123,10 +123,17 @@
 #define LAMPDIST	3
 #ifdef MASTER
 #ifndef PASSWD
-//#define	PASSWD		"mTBellIQOsLNA"
-#define	PASSWD		"mTczFhLjf1gLg"
+#define	PASSWD		"mTfolnRzp/33s" /* hicsuntleones */
 #endif
 #endif
+
+/*
+ * Version
+ */
+#define VERSION_5_3	'3'
+#define VERSION_5_4	'4'
+#define ISVERSION_5_3()	(rogue_version == VERSION_5_3)
+#define ISVERSION_5_4()	(rogue_version == VERSION_5_4)
 
 /*
  * Save against things
@@ -361,8 +368,8 @@ struct stats {
     int s_exp;				/* Experience */
     int s_lvl;				/* level of mastery */
     int s_arm;				/* Armor class */
-    int s_hpt;			/* Hit points */
-    char s_dmg[13];			/* String describing damage done */
+    int s_hpt;				/* Hit points */
+    char s_dmg[16];			/* String describing damage done */
     int  s_maxhp;			/* Max hit points */
 };
 
@@ -470,7 +477,8 @@ extern bool	after, again, allscore, amulet, door_stop, fight_flush,
 extern char	dir_ch, file_name[], home[], huh[], *inv_t_name[],
 		l_last_comm, l_last_dir, last_comm, last_dir, *Numname,
 		outbuf[], *p_colors[], *r_stones[], *release, runch,
-		*s_names[], take, *tr_name[], *ws_made[], *ws_type[];
+		*s_names[], take, *tr_name[], *ws_made[], *ws_type[],
+		rogue_version;
 
 extern int	a_class[], count, food_left, hungry_state, inpack,
 		inv_type, lastscore, level, max_hit, max_level, mpos,
@@ -496,7 +504,9 @@ extern struct room	*oldrp, passages[], rooms[];
 
 extern struct stats	max_stats;
 
-extern struct monster	monsters[];
+/* extern struct monster	monsters[]; */
+extern struct monster *get_monsters();
+#define monsters (get_monsters())
 
 extern struct obj_info	arm_info[], pot_info[], ring_info[],
 			scr_info[], things[], ws_info[], weap_info[];
