@@ -27,8 +27,6 @@ main(int argc, char **argv, char **envp)
 
     md_init();
 
-    printf("monsters/weapons/potions/scrolls/traps/wand: DONE, armor: N/A, ring: TODO\n");
-
 #ifdef MASTER
     /*
      * Check to see if he is a wizard
