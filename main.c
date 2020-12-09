@@ -27,7 +27,7 @@ main(int argc, char **argv, char **envp)
 
     md_init();
 
-    printf("monsters/weapons/potions: DONE, armor: N/A, ring_wand/scrolls: TODO\n");
+    printf("monsters/weapons/potions/scrolls: DONE, armor: N/A, ring/wand: TODO\n");
 
 #ifdef MASTER
     /*

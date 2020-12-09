@@ -265,3 +265,23 @@ save(int which)
     }
     return save_throw(which, &player);
 }
+
+/*
+ * pick_mons:
+ *	Choose a sort of monster for the enemy of a vorpally enchanted weapon.
+ *	Used only in version 5.3.
+ */
+int pick_mons()
+{
+    char *cp = lvl_mons + strlen(lvl_mons);
+
+    while (--cp >= lvl_mons && rnd(10))
+	;
+    if (cp < lvl_mons) {
+#ifdef DEBUG
+	msg("Can't choose an enemy for a weapon.");
+#endif
+	return 'U';
+    }
+    return *cp;
+}

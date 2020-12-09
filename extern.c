@@ -336,26 +336,54 @@ struct obj_info ring_info[MAXRINGS] = {
     { "maintain armor",		 5, 380, NULL, FALSE },
 };
 
-struct obj_info scr_info[MAXSCROLLS] = {
+struct obj_info scr_info_5_3[MAXSCROLLS] = {
+    /* common */
+    { "monster confusion",		 8, 140, NULL, FALSE },
+    { "magic mapping",			 5, 150, NULL, FALSE },
+    { "hold monster",			 3, 180, NULL, FALSE },
+    { "sleep",				 5,   5, NULL, FALSE },
+    { "enchant armor",			 8, 160, NULL, FALSE },
+    { "scare monster",			 4, 200, NULL, FALSE },
+    { "teleportation",			 7, 165, NULL, FALSE },
+    { "enchant weapon",			10, 150, NULL, FALSE },
+    { "create monster",			 5,  75, NULL, FALSE },
+    { "remove curse",			 8, 105, NULL, FALSE },
+    { "aggravate monsters",		 4,  20, NULL, FALSE },
+    /* specific to version 5.3 */
+    { "identify",                       27, 100, NULL, FALSE },
+    { "gold detection",                  4,  50, NULL, FALSE },
+    { "blank paper",                     1,   5, NULL, FALSE },
+    { "vorpalize weapon",                1, 300, NULL, FALSE },
+    { "blank paper",                     0,   5, NULL, FALSE },
+    { "blank paper",                     0,   5, NULL, FALSE },
+    { "blank paper",                     0,   5, NULL, FALSE },
+};
+struct obj_info scr_info_5_4[MAXSCROLLS] = {
+    /* common */
     { "monster confusion",		 7, 140, NULL, FALSE },
     { "magic mapping",			 4, 150, NULL, FALSE },
     { "hold monster",			 2, 180, NULL, FALSE },
     { "sleep",				 3,   5, NULL, FALSE },
     { "enchant armor",			 7, 160, NULL, FALSE },
-    { "identify potion",		10,  80, NULL, FALSE },
-    { "identify scroll",		10,  80, NULL, FALSE },
-    { "identify weapon",		 6,  80, NULL, FALSE },
-    { "identify armor",		 	 7, 100, NULL, FALSE },
-    { "identify ring, wand or staff",	10, 115, NULL, FALSE },
     { "scare monster",			 3, 200, NULL, FALSE },
-    { "food detection",			 2,  60, NULL, FALSE },
     { "teleportation",			 5, 165, NULL, FALSE },
     { "enchant weapon",			 8, 150, NULL, FALSE },
     { "create monster",			 4,  75, NULL, FALSE },
     { "remove curse",			 7, 105, NULL, FALSE },
     { "aggravate monsters",		 3,  20, NULL, FALSE },
+    /* specific to version 5.4 */
+    { "identify potion",		10,  80, NULL, FALSE },
+    { "identify scroll",		10,  80, NULL, FALSE },
+    { "identify weapon",		 6,  80, NULL, FALSE },
+    { "identify armor",		 	 7, 100, NULL, FALSE },
+    { "identify ring, wand or staff",	10, 115, NULL, FALSE },
+    { "food detection",			 2,  60, NULL, FALSE },
     { "protect armor",			 2, 250, NULL, FALSE },
 };
+struct obj_info *get_scr_info()
+{
+    return ISVERSION_5_3() ? scr_info_5_3 : scr_info_5_4;
+}
 
 struct obj_info weap_info_5_3[MAXWEAPONS + 1] = {
     { "mace",				10,   8, NULL, FALSE },

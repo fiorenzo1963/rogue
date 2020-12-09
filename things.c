@@ -81,10 +81,14 @@ inv_name(THING *obj, bool drop)
 		sprintf(pb, "%s", sp);
 	    if (obj->o_count > 1)
 		strcat(pb, "s");
-	    if (obj->o_label != NULL)
-	    {
+	    if (obj->o_label != NULL) {
 		pb = &prbuf[strlen(prbuf)];
 		sprintf(pb, " called %s", obj->o_label);
+		if (obj->o_enemy && obj->o_flags & ISREVEAL) {
+		    strcat(pb, " of ");
+		    strcat(pb, monsters[obj->o_enemy-'A'].m_name);
+		    strcat(pb, " slaying");
+		}
 	    }
 	when ARMOR:
 	    sp = arm_info[which].oi_name;

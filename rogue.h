@@ -159,6 +159,7 @@
 #define ISMANY	0000010		/* object comes in groups */
 /*	ISFOUND 0000020		...is used for both objects and creatures */
 #define	ISPROT	0000040		/* armor is permanently protected */
+#define ISREVEAL 000100         /* vorpalized weapon: we know who the enemy is */
 
 /* flags for creatures */
 #define CANHUH	0000001		/* creature can confuse */
@@ -236,19 +237,28 @@
 #define S_HOLD		2
 #define S_SLEEP		3
 #define S_ARMOR		4
-#define S_ID_POTION	5
-#define S_ID_SCROLL	6
-#define S_ID_WEAPON	7
-#define S_ID_ARMOR	8
-#define S_ID_R_OR_S	9
-#define S_SCARE		10
-#define S_FDET		11
-#define S_TELEP		12
-#define S_ENCH		13
-#define S_CREATE	14
-#define S_REMOVE	15
-#define S_AGGR		16
-#define S_PROTECT	17
+#define S_SCARE		5
+#define S_TELEP		6
+#define S_ENCH		7
+#define S_CREATE	8
+#define S_REMOVE	9
+#define S_AGGR		10
+/* 5.3 */
+#define S_IDENT_5_3	11
+#define S_GFIND_5_3	12
+#define S_NOP_5_3	13
+#define S_VORPAL_5_3	14
+#define S_NOP2_5_3	15 /* duplicate to fill to 18 - has zero probability */
+#define S_NOP3_5_3	16 /* duplicate to fill to 18 - has zero probability */
+#define S_NOP4_5_3	17 /* duplicate to fill to 18 - has zero probability */
+/* 5.4 */
+#define S_ID_POTION_5_4	11
+#define S_ID_SCROLL_5_4	12
+#define S_ID_WEAPON_5_4	13
+#define S_ID_ARMOR_5_4	14
+#define S_ID_R_OR_S_5_4	15
+#define S_FDET_5_4	16
+#define S_PROTECT_5_4	17
 #define MAXSCROLLS	18
 
 /*
@@ -400,7 +410,8 @@ union thing {
 	struct stats _t_stats;		/* Physical description */
 	struct room *_t_room;		/* Current room for thing */
 	union thing *_t_pack;		/* What the thing is carrying */
-        int _t_reserved;
+	int _t_reserved1;
+	int _t_reserved2;
     } _t;
     struct {
 	union thing *_l_next, *_l_prev;	/* Next pointer in link */
@@ -411,14 +422,15 @@ union thing {
 	char _o_packch;			/* What character it is in the pack */
 	char _o_damage[8];		/* Damage if used like sword */
 	char _o_hurldmg[8];		/* Damage if thrown */
-	int _o_count;			/* count for plural objects */
+	int _o_count;			/* Count for plural objects */
 	int _o_which;			/* Which object of a type it is */
 	int _o_hplus;			/* Plusses to hit */
 	int _o_dplus;			/* Plusses to damage */
 	int _o_arm;			/* Armor protection */
-	int _o_flags;			/* information about objects */
+	int _o_flags;			/* Information about objects */
 	int _o_group;			/* group number for this object */
 	char *_o_label;			/* Label for object */
+	int _o_enemy;			/* Vorpalized Weapon enemy */
     } _o;
 };
 
@@ -436,7 +448,6 @@ typedef union thing THING;
 #define t_stats		_t._t_stats
 #define t_pack		_t._t_pack
 #define t_room		_t._t_room
-#define t_reserved      _t._t_reserved
 #define o_type		_o._o_type
 #define o_pos		_o._o_pos
 #define o_text		_o._o_text
@@ -454,6 +465,7 @@ typedef union thing THING;
 #define o_flags		_o._o_flags
 #define o_group		_o._o_group
 #define o_label		_o._o_label
+#define o_enemy         _o._o_enemy
 
 /*
  * describe a place on the level map
@@ -520,11 +532,13 @@ extern struct monster *get_monsters();
 #define monsters (get_monsters())
 
 extern struct obj_info	arm_info[], ring_info[],
-			scr_info[], things[], ws_info[];
+			things[], ws_info[];
 extern struct obj_info *get_weap_info();
 #define weap_info (get_weap_info())
 extern struct obj_info *get_pot_info();
 #define pot_info (get_pot_info())
+extern struct obj_info *get_scr_info();
+#define scr_info (get_scr_info())
 
 /*
  * Function types
@@ -552,6 +566,7 @@ void	check_level();
 void	conn(int r1, int r2);
 void	command();
 void	create_obj();
+int     pick_mons();
 
 void	current(THING *cur, char *how, char *where);
 void	d_level();
