@@ -256,7 +256,6 @@ struct monster monsters_5_4_5[26] = {
 };
 #undef ___
 #undef XX
-
 struct monster *get_monsters()
 {
     return ISVERSION_5_3() ? monsters_5_3 : monsters_5_4_5;
@@ -334,7 +333,21 @@ struct obj_info scr_info[MAXSCROLLS] = {
     { "aggravate monsters",		 3,  20, NULL, FALSE },
     { "protect armor",			 2, 250, NULL, FALSE },
 };
-struct obj_info weap_info[MAXWEAPONS + 1] = {
+
+struct obj_info weap_info_5_3[MAXWEAPONS + 1] = {
+    { "mace",				10,   8, NULL, FALSE },
+    { "long sword",			10,  15, NULL, FALSE },
+    { "short bow",			10,  15, NULL, FALSE },
+    { "arrow",				10,   1, NULL, FALSE },
+    { "dagger",				10,   3, NULL, FALSE },
+    { "two handed sword",		10,  75, NULL, FALSE },
+    { "dart",				10,   2, NULL, FALSE },
+    { "crossbow",			10,   5, NULL, FALSE },
+    { "crossbow bolt",			10,   5, NULL, FALSE },
+    { "spear",				10,   5, NULL, FALSE },
+    { NULL, 0, 0, NULL, FALSE },	/* DO NOT REMOVE: fake entry for dragon's breath */
+};
+struct obj_info weap_info_5_4[MAXWEAPONS + 1] = {
     { "mace",				11,   8, NULL, FALSE },
     { "long sword",			11,  15, NULL, FALSE },
     { "short bow",			12,  15, NULL, FALSE },
@@ -342,10 +355,19 @@ struct obj_info weap_info[MAXWEAPONS + 1] = {
     { "dagger",				 8,   3, NULL, FALSE },
     { "two handed sword",		10,  75, NULL, FALSE },
     { "dart",				12,   2, NULL, FALSE },
-    { "shuriken",			12,   5, NULL, FALSE },
+    { "shuriken",			 6,   5, NULL, FALSE },
+    /*
+     * The duplicate is not a mistake, see rogue.h.
+     */
+    { "shuriken",			 6,   5, NULL, FALSE },
     { "spear",				12,   5, NULL, FALSE },
-    { NULL, 0 },	/* DO NOT REMOVE: fake entry for dragon's breath */
+    { NULL, 0, 0, NULL, FALSE },	/* DO NOT REMOVE: fake entry for dragon's breath */
 };
+struct obj_info *get_weap_info()
+{
+    return ISVERSION_5_3() ? weap_info_5_3 : weap_info_5_4;
+}
+
 struct obj_info ws_info[MAXSTICKS] = {
     { "light",			12, 250, NULL, FALSE },
     { "invisibility",		 6,   5, NULL, FALSE },

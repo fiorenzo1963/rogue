@@ -257,10 +257,17 @@
 #define DAGGER		4
 #define TWOSWORD	5
 #define DART		6
-#define SHIRAKEN	7
-#define SPEAR		8
-#define FLAME		9	/* fake entry for dragon breath (ick) */
-#define MAXWEAPONS	9	/* this should equal FLAME */
+/*
+ * Shiraken is duplicated in 5.4 so to have same number of objects than in 5.3.
+ * Shiraken odds is cut in half in both of them to result in the same odds.
+ */
+#define CROSSBOW_5_3	7
+#define BOLT_5_3	8
+#define SHIRAKEN_5_4	7
+#define SHIRAKEN_DP_5_4	8
+#define SPEAR		9
+#define FLAME		10	/* fake entry for dragon breath (ick) */
+#define MAXWEAPONS	10	/* this should equal FLAME */
 
 /*
  * Armor types
@@ -509,7 +516,9 @@ extern struct monster *get_monsters();
 #define monsters (get_monsters())
 
 extern struct obj_info	arm_info[], pot_info[], ring_info[],
-			scr_info[], things[], ws_info[], weap_info[];
+			scr_info[], things[], ws_info[];
+extern struct obj_info *get_weap_info();
+#define weap_info (get_weap_info())
 
 /*
  * Function types
@@ -742,7 +751,7 @@ THING	*find_obj(int y, int x);
 THING	*get_item(char *purpose, int type);
 THING	*leave_pack(THING *obj, bool all);
 THING	*new_item();
-THING	*new_thing();
+THING	*new_thing(bool initial_object);
 
 struct room	*roomin(coord *cp);
 

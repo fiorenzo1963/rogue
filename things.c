@@ -214,7 +214,7 @@ dropcheck(THING *obj)
  *	Return a new thing
  */
 THING *
-new_thing()
+new_thing(bool initial_object)
 {
     THING *cur;
     int r;
@@ -249,8 +249,8 @@ new_thing()
 		cur->o_which = 1;
 	when 3:
 	    init_weapon(cur, pick_one(weap_info, MAXWEAPONS));
-	    if ((r = rnd(100)) < 10)
-	    {
+	    r = rnd(100);
+	    if (r < 10 && initial_object == FALSE) {
 		cur->o_flags |= ISCURSED;
 		cur->o_hplus -= rnd(3) + 1;
 	    }
@@ -260,13 +260,13 @@ new_thing()
 	    cur->o_type = ARMOR;
 	    cur->o_which = pick_one(arm_info, MAXARMORS);
 	    cur->o_arm = a_class[cur->o_which];
-	    if ((r = rnd(100)) < 20)
-	    {
+	    r = rnd(100);
+	    if (r < 20 && initial_object == FALSE) {
 		cur->o_flags |= ISCURSED;
 		cur->o_arm += rnd(3) + 1;
-	    }
-	    else if (r < 28)
+	    } else if (r < 28) {
 		cur->o_arm -= rnd(3) + 1;
+	    }
 	when 5:
 	    cur->o_type = RING;
 	    cur->o_which = pick_one(ring_info, MAXRINGS);
@@ -276,8 +276,8 @@ new_thing()
 		case R_PROTECT:
 		case R_ADDHIT:
 		case R_ADDDAM:
-		    if ((cur->o_arm = rnd(3)) == 0)
-		    {
+		    cur->o_arm = rnd(3);
+		    if (cur->o_arm == 0 && initial_object == FALSE) {
 			cur->o_arm = -1;
 			cur->o_flags |= ISCURSED;
 		    }
@@ -295,6 +295,8 @@ new_thing()
 	    wait_for(' ');
 #endif
     }
+    if (initial_object == TRUE)
+	make_known(cur);
     return cur;
 }
 

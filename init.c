@@ -85,8 +85,7 @@ init_player()
         if (goodies >= MAXPACK)
             goodies = MAXPACK - 5;
         for (i = 0; i < goodies; i++) {
-            obj = new_thing();
-            make_known(obj);
+            obj = new_thing(TRUE);
             add_pack(obj, TRUE);
         }
         /*
@@ -448,9 +447,9 @@ badcheck(char *name, struct obj_info *info, int bound)
 
     if (info[bound - 1].oi_prob == 100)
 	return;
-    printf("\nBad percentages for %s (bound = %d):\n", name, bound);
+    printf("\n\rBad percentages for %s (bound = %d):\n\r", name, bound);
     for (end = &info[bound]; info < end; info++)
-	printf("%3d%% %s\n", info->oi_prob, info->oi_name);
+	printf("%3d%% %s\n\r", info->oi_prob, info->oi_name);
     printf("[hit RETURN to continue]");
     fflush(stdout);
     while (getchar() != '\n')

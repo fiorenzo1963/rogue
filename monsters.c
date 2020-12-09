@@ -236,7 +236,7 @@ void
 give_pack(THING *tp)
 {
     if (level >= max_level && rnd(100) < monsters[tp->t_type-'A'].m_carry)
-	attach(&tp->t_pack, new_thing());
+	attach(&tp->t_pack, new_thing(FALSE));
 }
 
 /*
