@@ -1,6 +1,6 @@
 # ROGUE
 
-Rogue version 5.4.4.2018.2, derived from version 5.4.4.
+Rogue version 5.3-4.4.2020.1, derived from Rogue version 5.4.4 at https://github.com/Davidslv/rogue.git,
 
 Original Copyright:
 ```
@@ -31,6 +31,7 @@ Build as follows:
 
 ## Options and Features
 
+- This version has miscellanous bug fixes and it now supports Rogue version 5.3 (circa 1980, Italy). Each version has slightly different monsters, objects and traps. By default it runs in 5.3 mode.
 - This version has modified to run on 2018 versions of MacOS, Linux and FreeBSD.
   - Major bug fixes in object placement, management, and inventory.
   - Other bug fixes.
@@ -38,13 +39,19 @@ Build as follows:
     - Warrior mode is the original behavior.
     - Rookie mode gives you better weapon and armor, a few goodies, and much higher chances of finding a roomfull of monsters. This gives you more chances of acquiring resources.
 
-- To run in "Warrior" mode: rogue
-- To run in "Rookie" mode: rogue -r
-- To print scores for "Warrior" mode: rogue -s
-- To print scores for "Rookie" mode: rogue -r -s
-- To restore a saved game: rogue save_file
+- To run in 5.3 mode (default): rogue -5.3
+- To run in 5.4 mode: rogue -5.4
+- To run in "Warrior" mode: rogue [-version]
+- To run in "Rookie" mode: rogue -r [-version]
+- To print scores for "Warrior" mode: rogue -s [-version]
+- To print scores for "Rookie" mode: rogue -r -s [-version]
+- To restore a saved game: rogue [-version] save_file
 
-## Messages
+## 5.3 Messages
+
+TBD
+
+## 5.4 Messages
 
 Well, you have the source code, so might as well summarize here messages.
 

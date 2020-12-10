@@ -27,25 +27,22 @@ main(int argc, char **argv, char **envp)
 
     md_init();
 
-#ifdef MASTER
-    /*
-     * Check to see if he is a wizard
-     */
-    if (argc >= 2 && argv[1][0] == '\0')
-	if (strcmp(PASSWD, md_crypt(md_getpass("wizard's password: "), "mT")) == 0)
-	{
-	    wizard = TRUE;
-	    player.t_flags |= SEEMONST;
-	    argv++;
-	    argc--;
-	}
-
-#endif
-
     /*
      * FIXME: do better arg processing
      */
     while (argc >= 2) {
+#ifdef MASTER
+	if (strcmp(argv[1], "-w") == 0) {
+	    if (strcmp(PASSWD, md_crypt(md_getpass("wizard's password: "), "mT")) == 0)
+	    {
+	        wizard = TRUE;
+	        player.t_flags |= SEEMONST;
+	    }
+            argc--;
+            argv++;
+	    continue;
+	}
+#endif
 	if (strcmp(argv[1], "-r") == 0) {
             rookie_mode = TRUE;
             argc--;
