@@ -1,4 +1,4 @@
-# ROGUE
+# ROGUE 5.3 - 5.4
 
 Rogue version 5.3-4.4.2020.1, derived from Rogue version 5.4.4 at https://github.com/Davidslv/rogue.git,
 
