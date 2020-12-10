@@ -2,6 +2,8 @@
 
 Rogue version 5.3-4.4.2020.1, derived from Rogue version 5.4.4 at https://github.com/Davidslv/rogue.git,
 
+This is an enchanced version which can either run Monsters, Objects and other behavior like Traps, as version 5.3 (default, 1982) or the latest known version 5.4.4. Use -5.4 to run in 5.4.4 mode, -5.3 otherwise (5.3 is default).
+
 Original Copyright:
 ```
 Copyright (C) 1980-1983, 1985, 1999 Michael Toy, Ken Arnold and Glenn Wichman.
